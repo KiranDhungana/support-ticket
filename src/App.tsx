@@ -1,6 +1,7 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Routes, Route, useLocation } from "react-router-dom";
-import LoginPage from "./pages/Login/LoginPage";
+// import LoginPage from "./pages/Login/LoginPage";
+import Landing from "./components/Landing"
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import UserDashboard from "./pages/Dashboard/UserDashboard";
 import { MantineProvider } from "@mantine/core";
@@ -38,7 +39,7 @@ function LayoutWithSidebar() {
       <div style={{ flex: 1 }}>
         {!hideSidebar && <Navbar />}
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<Landing/>} />
 
           <Route
             path="/dashboard/admin"
