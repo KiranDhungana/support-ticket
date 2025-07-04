@@ -14,12 +14,14 @@ import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import UserTickets from "./pages/Usertickets/UserTickets";
 import UserPage from "./pages/Users/UserPage";
+import LoginPage from "./pages/Login/LoginPage";
 
 function LayoutWithSidebar() {
   const location = useLocation();
   const { user } = useAuth();
 
-  const hideSidebar = location.pathname === "/";
+  const hideSidebar = location.pathname === "/" || location.pathname === "/login";
+  const hideNavbar = location.pathname === "/login";
 
   const links = [
     ...(user?.email === "utsab@wcpsb.com"
@@ -35,12 +37,11 @@ function LayoutWithSidebar() {
   return (
     <div style={{ display: "flex" }}>
       {!hideSidebar && <SideBar links={links} />}
-
       <div style={{ flex: 1 }}>
-        {!hideSidebar && <Navbar />}
+        {!hideNavbar && !hideSidebar && <Navbar />}
         <Routes>
           <Route path="/" element={<Landing/>} />
-
+          <Route path="/login" element={<LoginPage/>} />
           <Route
             path="/dashboard/admin"
             element={
@@ -57,7 +58,6 @@ function LayoutWithSidebar() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/dashboard/user"
             element={
