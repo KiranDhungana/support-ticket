@@ -15,13 +15,26 @@ import "@mantine/notifications/styles.css";
 import UserTickets from "./pages/Usertickets/UserTickets";
 import UserPage from "./pages/Users/UserPage";
 import LoginPage from "./pages/Login/LoginPage";
+import PublicNotices from "./pages/PublicNotices/PublicNotices";
+import Announcements from "./pages/Announcements/Announcements";
+import Staff from "./pages/Staff/Staff";
+import News from "./pages/News/News";
+import Jobs from "./pages/Jobs/Jobs";
+import BoardMembers from "./pages/BoardMembers/BoardMembers";
+import BoardMinutes from "./pages/BoardMinutes/BoardMinutes";
+import Principals from "./pages/Principals/Principals";
 
 function LayoutWithSidebar() {
   const location = useLocation();
   const { user } = useAuth();
 
-  const hideSidebar = location.pathname === "/" || location.pathname === "/login";
-  const hideNavbar = location.pathname === "/login";
+  // Show home navigation for non-logged-in users and public pages
+  const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals";
+  const isLoggedIn = !!user;
+  
+  // Only show sidebar and admin/user navbar for logged-in users on dashboard pages
+  const showSidebar = isLoggedIn && !isPublicPage;
+  const showAdminNavbar = isLoggedIn && !isPublicPage;
 
   const links = [
     ...(user?.email === "utsab@wcpsb.com"
@@ -34,14 +47,23 @@ function LayoutWithSidebar() {
           { icon: IconTicket, label: "My Tickets", path: "/dashboard/tickets" },
         ]),
   ];
+  
   return (
     <div style={{ display: "flex" }}>
-      {!hideSidebar && <SideBar links={links} />}
+      {showSidebar && <SideBar links={links} />}
       <div style={{ flex: 1 }}>
-        {!hideNavbar && !hideSidebar && <Navbar />}
+        {showAdminNavbar && <Navbar />}
         <Routes>
           <Route path="/" element={<Landing/>} />
           <Route path="/login" element={<LoginPage/>} />
+          <Route path="/public-notices" element={<PublicNotices/>} />
+          <Route path="/announcements" element={<Announcements/>} />
+          <Route path="/staff" element={<Staff/>} />
+          <Route path="/news" element={<News/>} />
+          <Route path="/jobs" element={<Jobs/>} />
+          <Route path="/board-members" element={<BoardMembers/>} />
+          <Route path="/board-minutes" element={<BoardMinutes/>} />
+          <Route path="/principals" element={<Principals/>} />
           <Route
             path="/dashboard/admin"
             element={

@@ -1,22 +1,7 @@
-import { Group, Container, Image, Text, Menu, Button, Divider, UnstyledButton, rem } from '@mantine/core';
-import { IconChevronDown, IconMenu2, IconWorld, IconSchool, IconPlayerPause, IconPlayerPlay, IconArrowLeft, IconArrowRight, IconChalkboard, IconCurrencyDollar, IconCalendarEvent, IconPencil, IconBook2 } from '@tabler/icons-react';
-
-const navLinks = [
-  { label: 'STUDENTS', dropdown: true },
-  { label: 'PARENTS', dropdown: true },
-  { label: 'EMPLOYEES' },
-  { label: 'LEADERSHIP', dropdown: true },
-  { label: 'PUBLIC NOTICES' },
-  { label: 'CALENDARS', dropdown: true },
-  { label: 'JOBS' },
-  { label: 'MORE', dropdown: true },
-];
-
-const quickLinks = [
-  { label: 'PreK-12th Grade Registration', href: '#' },
-  { label: 'Moodle', href: '#' },
-  { label: 'SchoolCash Online', href: '#' },
-];
+import { Group, Container, Image, Text, Button } from '@mantine/core';
+import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCurrencyDollar, IconCalendarEvent, IconPencil, IconBook2 } from '@tabler/icons-react';
+import { useState } from 'react';
+import HomeNavigation from './HomeNavigation';
 
 const heroImages = [
   '/public/Slider1.png',
@@ -24,169 +9,15 @@ const heroImages = [
   '/public/Slider3.png',
 ];
 
-import { useState } from 'react';
-import { Burger, Drawer, ScrollArea } from '@mantine/core';
-
 const Landing = () => {
   const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const next = () => setCurrent((c) => (c + 1) % heroImages.length);
   const prev = () => setCurrent((c) => (c - 1 + heroImages.length) % heroImages.length);
-  const togglePause = () => setPaused((p) => !p);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top Blue Bar */}
-      <div className="bg-blue-900 text-white h-17 px-4 py-2 flex flex-col sm:flex-row items-center justify-between">
-        <div className="flex items-center gap-2 py-2 ">
-          <img src="/public/Logo.png" alt="Logo" width={36} height={36}  />
-          <div>
-            <Text fw={700} size="md">Lincoln Parish Schools</Text>
-            <Text size="xs">A Quality Education for a Quality Life</Text>
-          </div>
-        </div>
-        <Group gap="md" visibleFrom="sm">
-          {quickLinks.map((link) => (
-            <a key={link.label} href={link.href} className="text-white hover:underline text-sm font-medium">{link.label}</a>
-          ))}
-        </Group>
-      </div>
-
-      {/* Main Navbar */}
-      <div className="bg-white shadow w-full px-2 md:px-4 py-2 flex items-center justify-between">
-        {/* Desktop Nav */}
-        <div className="hidden md:flex flex-1 items-center justify-between">
-          <Group gap="md" className="flex-wrap">
-            {navLinks.map((item) =>
-              item.dropdown ? (
-                <Menu key={item.label} withinPortal>
-                  <Menu.Target>
-                    <UnstyledButton className="flex items-center gap-1 px-2 py-1 hover:bg-gray-100 rounded">
-                      <span className="font-medium text-gray-800">{item.label}</span>
-                      <IconChevronDown size={16} />
-                    </UnstyledButton>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item>Option 1</Menu.Item>
-                    <Menu.Item>Option 2</Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              ) : (
-                <UnstyledButton key={item.label} className="px-2 py-1 font-medium text-gray-800 hover:bg-gray-100 rounded">
-                  {item.label}
-                </UnstyledButton>
-              )
-            )}
-          </Group>
-          <Group gap="xs">
-            <Menu withinPortal>
-              <Menu.Target>
-                <Button variant="subtle" leftSection={<IconMenu2 size={18} />} rightSection={<IconChevronDown size={16} />}>
-                  MENU
-                </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item>Menu 1</Menu.Item>
-                <Menu.Item>Menu 2</Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-            <Menu withinPortal>
-              <Menu.Target>
-                <Button variant="subtle" leftSection={<IconSchool size={18} />} rightSection={<IconChevronDown size={16} />}>
-                  SCHOOLS
-                </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item>School 1</Menu.Item>
-                <Menu.Item>School 2</Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-            <Menu withinPortal>
-              <Menu.Target>
-                <Button variant="subtle" leftSection={<IconWorld size={18} />} rightSection={<IconChevronDown size={16} />}>
-                  TRANSLATE
-                </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item>English</Menu.Item>
-                <Menu.Item>Spanish</Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
-        </div>
-        {/* Hamburger for mobile */}
-        <div className="flex md:hidden flex-1 items-center justify-between">
-          <Burger opened={mobileNavOpen} onClick={() => setMobileNavOpen((o) => !o)} aria-label="Open navigation" />
-        </div>
-        <Drawer
-          opened={mobileNavOpen}
-          onClose={() => setMobileNavOpen(false)}
-          padding="md"
-          size="80vw"
-          title="Menu"
-          className="md:hidden"
-        >
-          <ScrollArea h="80vh">
-            <div className="flex flex-col gap-4 mt-4">
-              {navLinks.map((item) =>
-                item.dropdown ? (
-                  <Menu key={item.label} withinPortal>
-                    <Menu.Target>
-                      <UnstyledButton className="flex items-center gap-1 px-2 py-2 hover:bg-gray-100 rounded w-full text-left">
-                        <span className="font-medium text-gray-800">{item.label}</span>
-                        <IconChevronDown size={16} />
-                      </UnstyledButton>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                      <Menu.Item>Option 1</Menu.Item>
-                      <Menu.Item>Option 2</Menu.Item>
-                    </Menu.Dropdown>
-                  </Menu>
-                ) : (
-                  <UnstyledButton key={item.label} className="px-2 py-2 font-medium text-gray-800 hover:bg-gray-100 rounded w-full text-left">
-                    {item.label}
-                  </UnstyledButton>
-                )
-              )}
-              <Menu withinPortal>
-                <Menu.Target>
-                  <Button variant="subtle" leftSection={<IconMenu2 size={18} />} rightSection={<IconChevronDown size={16} />} fullWidth>
-                    MENU
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item>Menu 1</Menu.Item>
-                  <Menu.Item>Menu 2</Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-              <Menu withinPortal>
-                <Menu.Target>
-                  <Button variant="subtle" leftSection={<IconSchool size={18} />} rightSection={<IconChevronDown size={16} />} fullWidth>
-                    SCHOOLS
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item>School 1</Menu.Item>
-                  <Menu.Item>School 2</Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-              <Menu withinPortal>
-                <Menu.Target>
-                  <Button variant="subtle" leftSection={<IconWorld size={18} />} rightSection={<IconChevronDown size={16} />} fullWidth>
-                    TRANSLATE
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item>English</Menu.Item>
-                  <Menu.Item>Spanish</Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </div>
-          </ScrollArea>
-        </Drawer>
-      </div>
+      <HomeNavigation />
 
       {/* Hero Section / Slider */}
       <div className="relative w-full h-[260px] sm:h-[340px] md:h-[420px] flex items-end justify-center bg-gray-200 overflow-hidden">
@@ -198,20 +29,40 @@ const Landing = () => {
         />
         <div className="relative z-10 w-full flex flex-col items-center pb-10">
           <Text className="text-white text-4xl sm:text-5xl font-bold drop-shadow-lg mb-2">Hillcrest Elementary.</Text>
-          <div className="flex items-center gap-2 mt-4">
-            <Button variant="filled" color="red" size="md" radius="md" onClick={togglePause}>
-              {paused ? <IconPlayerPlay size={24} /> : <IconPlayerPause size={24} />}
-            </Button>
-            <div className="flex gap-1">
+          <div className="flex items-center gap-4 mt-4">
+            <div className="flex gap-2">
               {heroImages.map((_, idx) => (
-                <div
+                <button
                   key={idx}
-                  className={`w-3 h-3 rounded-full mx-0.5 ${idx === current ? 'bg-blue-600' : 'bg-white border border-blue-600'}`}
+                  onClick={() => setCurrent(idx)}
+                  className={`w-4 h-4 rounded-full transition-all duration-300 ease-in-out ${
+                    idx === current 
+                      ? 'bg-white scale-125 shadow-lg shadow-white/50' 
+                      : 'bg-white/50 hover:bg-white/80 border border-white/80'
+                  }`}
                 />
               ))}
             </div>
-            <Button variant="filled" color="red" size="md" radius="md" onClick={prev}><IconArrowLeft size={24} /></Button>
-            <Button variant="filled" color="red" size="md" radius="md" onClick={next}><IconArrowRight size={24} /></Button>
+            <div className="flex gap-3">
+              <Button 
+                variant="filled" 
+                size="md" 
+                radius="xl"
+                onClick={prev}
+                className="bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-white hover:text-white"
+              >
+                <IconArrowLeft size={20} />
+              </Button>
+              <Button 
+                variant="filled" 
+                size="md" 
+                radius="xl"
+                onClick={next}
+                className="bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-white hover:text-white"
+              >
+                <IconArrowRight size={20} />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
