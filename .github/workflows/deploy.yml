@@ -1,0 +1,36 @@
+name: Deploy React Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Deploy React frontend on VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no root@82.25.95.230 << 'EOF'
+            cd /var/www/support-ticket
+            git pull origin main
+            npm install
+            npm run build
+
+            # Clear Nginx root folder and copy new build
+            rm -rf /var/www/html/*
+            cp -r build/* /var/www/html/
+
+            # Reload Nginx to serve updated frontend
+            sudo systemctl reload nginx
+          EOF
+

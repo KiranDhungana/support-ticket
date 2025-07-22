@@ -1,8 +1,8 @@
 import '@mantine/carousel/styles.css';
 import { Carousel } from '@mantine/carousel';
-import { Image, createStyles } from '@mantine/core';
+import { Image } from '@mantine/core';
 
-const useStyles = createStyles((theme) => ({
+const carouselStyles = {
   carousel: {
     '& .mantine-Carousel-indicators': {
       bottom: 20,
@@ -43,7 +43,7 @@ const useStyles = createStyles((theme) => ({
       },
     },
   },
-}));
+};
 
 const images = [
   '/Slider1.png',
@@ -54,8 +54,6 @@ const images = [
 ];
 
 const Slider = () => {
-  const { classes } = useStyles();
-  
   const slides = images.map((url) => (
     <Carousel.Slide key={url}>
       <Image src={url} />
@@ -66,7 +64,6 @@ const Slider = () => {
     <Carousel 
       withIndicators 
       height={700}
-      classNames={{ root: classes.carousel }}
       withControls
     >
       {slides}

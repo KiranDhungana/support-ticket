@@ -5,7 +5,7 @@ import Landing from "./components/Landing"
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import UserDashboard from "./pages/Dashboard/UserDashboard";
 import { MantineProvider } from "@mantine/core";
-import { IconGauge, IconHome2, IconTicket, IconUsers, IconDashboard, IconFileText, IconBuilding, IconBell, IconNews, IconBriefcase, IconUser } from "@tabler/icons-react";
+import { IconGauge, IconTicket, IconUsers, IconDashboard, IconFileText, IconBuilding, IconBell, IconNews, IconBriefcase, IconUser } from "@tabler/icons-react";
 import { SideBar } from "./layouts/SideBar";
 import { AdminSidebar } from "./components/AdminSidebar";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
