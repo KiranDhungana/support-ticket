@@ -6,8 +6,7 @@ import {
   deleteNews,
   togglePublishStatus
 } from '../../services/newsService';
-import type { News, CreateNewsData } from '../../services/newsService';
-import { uploadImage } from '../../services/uploadService';
+import type { News } from '../../services/newsService';
 import FileUpload from '../../components/FileUpload';
 import Toster from '../../components/Toster';
 

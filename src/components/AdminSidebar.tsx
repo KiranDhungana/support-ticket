@@ -5,10 +5,6 @@ import {
   IconLogout, 
   IconMenu2, 
   IconX, 
-  IconDashboard,
-  IconFileText,
-  IconUsers,
-  IconTicket,
   IconSettings,
   IconPlus
 } from "@tabler/icons-react";

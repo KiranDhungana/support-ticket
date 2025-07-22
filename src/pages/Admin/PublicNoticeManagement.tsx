@@ -6,19 +6,14 @@ import {
   Button, 
   Group, 
   Text, 
-  TextInput, 
-  Select, 
   Stack, 
   Card, 
   Badge, 
   ActionIcon, 
   Tooltip,
   Grid,
-  Box,
   Divider,
-  LoadingOverlay,
-  Textarea,
-  Modal
+  LoadingOverlay
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { createPortal } from 'react-dom';
@@ -30,10 +25,7 @@ import {
   IconFileText,
   IconCalendar,
   IconUser,
-  IconDownload,
-  IconUpload,
-  IconPhoto,
-  IconFile
+  IconDownload
 } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import API from '../../services/api';

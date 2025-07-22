@@ -7,9 +7,7 @@ import {
   Group, 
   Badge, 
   Image, 
-  Button,
-  Stack,
-  Divider
+  Button
 } from '@mantine/core';
 import { 
   IconCalendar, 

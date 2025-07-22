@@ -13,8 +13,7 @@ import {
   Breadcrumbs, 
   Anchor,
   LoadingOverlay,
-  Pagination,
-
+  Pagination
 } from '@mantine/core';
 import { createPortal } from 'react-dom';
 import { 
@@ -22,9 +21,7 @@ import {
   IconMail, 
   IconPhone, 
   IconMapPin, 
-  
-  IconSearch,
- 
+  IconSearch
 } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import HomeNavigation from '../../components/HomeNavigation';

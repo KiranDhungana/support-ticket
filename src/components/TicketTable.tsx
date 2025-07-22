@@ -1,13 +1,13 @@
 import { Avatar, Badge } from "@mantine/core";
-import { Button, Menu, Table, Tabs, Tooltip } from "@mantine/core";
-import { IconEye, IconDotsVertical, IconLockOpen2, IconX, IconEdit, IconLock, IconTrash, IconDeviceFloppy, IconX as IconClose } from "@tabler/icons-react";
+import { Menu, Table, Tabs, Tooltip } from "@mantine/core";
+import { IconDotsVertical, IconLockOpen2, IconX, IconEdit, IconLock, IconTrash } from "@tabler/icons-react";
 import React from "react";
 import { deleteTicketApi, updateTicketStatus } from "../services/api";
 import { notifications } from "@mantine/notifications";
 
 import { useDisclosure } from "@mantine/hooks";
 import { IconInbox } from "@tabler/icons-react";
-import { Card, Paper, TextInput, Pagination, Group, ActionIcon, Select, Stack, Text, Box, Flex, Divider, Textarea } from "@mantine/core";
+import { Card, Paper, TextInput, Pagination, Group, ActionIcon, Select, Stack, Text, Flex } from "@mantine/core";
 import { IconSearch, IconFilter, IconSortAscending, IconSortDescending, IconEye as IconEyeTabler } from "@tabler/icons-react";
 import { createPortal } from "react-dom";
 

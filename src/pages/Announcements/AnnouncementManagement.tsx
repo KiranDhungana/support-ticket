@@ -6,8 +6,7 @@ import {
   deleteAnnouncement,
   getCategories
 } from '../../services/announcementService';
-import type { Announcement, CreateAnnouncementData } from '../../services/announcementService';
-import { uploadImage } from '../../services/uploadService';
+import type { Announcement } from '../../services/announcementService';
 import FileUpload from '../../components/FileUpload';
 import Toster from '../../components/Toster';
 

@@ -17,15 +17,13 @@ import {
   Grid,
   ActionIcon,
   Tooltip,
-  Modal,
- 
+  Modal
 } from "@mantine/core";
 import { 
   IconUser, 
   IconSearch, 
   IconDotsVertical, 
   IconEdit, 
-
   IconTrash, 
   IconUserUp, 
   IconInbox,
