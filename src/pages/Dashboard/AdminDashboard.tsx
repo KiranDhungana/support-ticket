@@ -15,7 +15,6 @@ import {
   Tooltip,
   Container,
   Flex,
-  Box,
   Divider
 } from "@mantine/core";
 import { 
@@ -28,11 +27,7 @@ import {
   IconTrendingUp,
   IconBell,
   IconSettings,
-  IconRefresh,
-  IconDashboard,
-  IconFileText,
-  IconUser,
-  IconBuilding
+  IconRefresh
 } from "@tabler/icons-react";
 
 const AdminDashboard = () => {
@@ -70,20 +65,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const fetchTickets = async () => {
-    try {
-      setRefreshing(true);
-      const response = await getTickets();
-      setTickets(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-      setError("Failed to fetch tickets");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+
 
   useEffect(() => {
     fetchDashboardData();

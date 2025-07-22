@@ -6,21 +6,17 @@ import {
   Badge, 
   Group, 
   Button, 
-  Stack, 
   Title, 
   Container, 
   TextInput, 
   Select,
-  Image,
-  Grid,
-  Divider
+  Image
 } from '@mantine/core';
 import { 
   IconSearch, 
   IconFilter, 
   IconCalendar, 
   IconUser, 
-  IconTag,
   IconEye,
   IconArrowRight
 } from '@tabler/icons-react';

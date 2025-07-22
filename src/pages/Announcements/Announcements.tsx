@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Card, Text, Badge, Group, Button, Modal, Stack, Title, Container } from '@mantine/core';
-import { IconCalendar, IconUser, IconTag, IconEye } from '@tabler/icons-react';
+import { Text, Title, Container } from '@mantine/core';
+import { IconCalendar, IconUser } from '@tabler/icons-react';
 import HomeNavigation from '../../components/HomeNavigation';
 import { getActiveAnnouncements } from '../../services/announcementService';
 import type { Announcement } from '../../services/announcementService';

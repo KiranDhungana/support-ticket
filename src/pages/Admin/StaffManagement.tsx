@@ -14,14 +14,10 @@ import {
   ActionIcon, 
   Tooltip,
   Grid,
-  Box,
   Divider,
   LoadingOverlay,
-  Textarea,
-  NumberInput,
   Avatar,
-  Pagination,
-  Modal
+  Pagination
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { createPortal } from 'react-dom';
@@ -34,7 +30,6 @@ import {
   IconMail,
   IconPhone,
   IconMapPin,
-  IconBriefcase,
   IconCalendar,
   IconSearch
 } from '@tabler/icons-react';

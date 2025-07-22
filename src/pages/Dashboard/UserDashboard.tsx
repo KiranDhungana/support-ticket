@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { logout, createTicket } from "../../services/api";
+import { createTicket } from "../../services/api";
 import { notifications } from "@mantine/notifications";
 
 import { useEffect, useState } from "react";

@@ -19,7 +19,7 @@ interface ModalProps {
   ticketData: TicketData | null;
 }
 
-const ModalComponent: React.FC<ModalProps> = ({ opened, onClose, ticketData }) => {
+const ModalComponent: React.FC<ModalProps> = ({ opened, onClose }) => {
   return (
     <Modal centered size="lg" zIndex={1000} opened={opened} onClose={onClose} title="Edit Ticket">
       test

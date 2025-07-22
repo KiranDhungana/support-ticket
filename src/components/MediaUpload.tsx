@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { 
-  Button, 
   Group, 
   Text, 
   Stack, 
@@ -10,9 +9,7 @@ import {
   Badge,
   Tooltip,
   Tabs,
-  Box,
-  Image,
-  Anchor
+  Image
 } from '@mantine/core';
 import { 
   IconUpload, 
