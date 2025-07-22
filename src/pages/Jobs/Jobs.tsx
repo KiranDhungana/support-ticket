@@ -5,22 +5,7 @@ import Pagination from '../../components/Pagination';
 import { getJobs, type Job as JobType } from '../../services/jobService';
 import './Jobs.css';
 
-interface Job {
-  id: number;
-  title: string;
-  company: string;
-  location: string;
-  type: 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
-  category: string;
-  salary: string;
-  experience: string;
-  postedDate: string;
-  description: string;
-  requirements: string[];
-  benefits: string[];
-  isRemote: boolean;
-  isUrgent: boolean;
-}
+
 
 
 

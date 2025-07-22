@@ -5,8 +5,7 @@ import {
   IconLogout, 
   IconMenu2, 
   IconX, 
-  IconSettings,
-  IconPlus
+
 } from "@tabler/icons-react";
 import { logout } from "../services/api";
 import { useState } from "react";

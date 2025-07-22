@@ -30,7 +30,7 @@ import {
   IconMail,
   IconPhone,
   IconMapPin,
-  IconCalendar,
+
   IconSearch
 } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
