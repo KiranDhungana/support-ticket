@@ -7,10 +7,9 @@ import {
   Group,
   TextInput,
   Select,
-  Textarea,
-  Stack,
+  
   Title,
-  Container,
+
   Badge,
   ActionIcon,
   Table,
@@ -18,7 +17,7 @@ import {
   Switch
 } from '@mantine/core';
 import { IconPlus, IconEdit, IconTrash, IconSearch, IconFilter } from '@tabler/icons-react';
-import { useAuth } from '../../contexts/AuthContext';
+
 import Toster from '../../components/Toster';
 import {
   getJobs,
