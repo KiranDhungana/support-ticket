@@ -69,14 +69,14 @@ const BoardMembers = () => {
   };
 
   const breadcrumbItems = [
-    { title: 'West Carroll Parish School Board', href: '/' },
-    { title: 'Leadership', href: '#' },
-    { title: 'Board Members', href: '/board-members' }
-  ].map((item, index) => (
-    <Anchor href={item.href} key={index} size="sm">
-      {item.title}
-    </Anchor>
-  ));
+  { title: 'Lincoln Parish Schools', href: '/' },
+  { title: 'Leadership', href: '#' },
+  { title: 'Board Members', href: '/board-members' }
+].map((item, index) => (
+  <Anchor href={item.href} key={index} size="sm">
+    {item.title}
+  </Anchor>
+));
 
   if (loading) {
     return (
