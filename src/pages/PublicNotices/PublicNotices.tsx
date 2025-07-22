@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Text, Button, Group, Badge, Stack, Container, Title, Breadcrumbs, Anchor, Image, LoadingOverlay } from '@mantine/core';
-import { IconFileText, IconDownload, IconEye, IconCalendar, IconUser, IconPhoto } from '@tabler/icons-react';
+import { IconFileText, IconDownload, IconEye, IconCalendar, IconUser } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import { createPortal } from 'react-dom';
 import HomeNavigation from '../../components/HomeNavigation';

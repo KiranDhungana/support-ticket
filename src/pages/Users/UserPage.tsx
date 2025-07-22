@@ -18,15 +18,14 @@ import {
   ActionIcon,
   Tooltip,
   Modal,
-  Textarea,
-  Select
+ 
 } from "@mantine/core";
 import { 
   IconUser, 
   IconSearch, 
   IconDotsVertical, 
   IconEdit, 
-  IconLock, 
+
   IconTrash, 
   IconUserUp, 
   IconInbox,
