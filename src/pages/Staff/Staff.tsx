@@ -14,7 +14,7 @@ import {
   Anchor,
   LoadingOverlay,
   Pagination,
-  Modal
+
 } from '@mantine/core';
 import { createPortal } from 'react-dom';
 import { 
@@ -22,9 +22,9 @@ import {
   IconMail, 
   IconPhone, 
   IconMapPin, 
-  IconBriefcase, 
+  
   IconSearch,
-  IconEye
+ 
 } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 import HomeNavigation from '../../components/HomeNavigation';
