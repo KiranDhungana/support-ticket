@@ -217,7 +217,7 @@ const Principals = () => {
   };
 
   const breadcrumbItems = [
-    { title: 'Lincoln Parish Schools', href: '/' },
+            { title: 'West Carroll Parish School Board', href: '/' },
     { title: 'Leadership', href: '#' },
     { title: 'Principals', href: '/principals' }
   ].map((item, index) => (

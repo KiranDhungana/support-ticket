@@ -315,7 +315,7 @@ const BoardMinutes = () => {
   };
 
   const breadcrumbItems = [
-    { title: 'Lincoln Parish Schools', href: '/' },
+            { title: 'West Carroll Parish School Board', href: '/' },
     { title: 'Leadership', href: '#' },
     { title: 'Board Minutes & Agenda', href: '/board-minutes' }
   ].map((item, index) => (

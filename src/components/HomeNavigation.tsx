@@ -42,7 +42,7 @@ const HomeNavigation = () => {
         >
           <img src="/public/Logo.png" alt="Logo" width={36} height={36}  />
           <div>
-            <Text fw={700} size="md">Lincoln Parish Schools</Text>
+            <Text fw={700} size="md">West Carroll Parish School Board</Text>
             <Text size="xs">A Quality Education for a Quality Life</Text>
           </div>
         </div>

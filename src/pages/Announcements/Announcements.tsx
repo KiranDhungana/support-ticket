@@ -1,71 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Text, Badge, Group, Button, Modal, Stack, Title, Container } from '@mantine/core';
 import { IconCalendar, IconUser, IconTag, IconEye } from '@tabler/icons-react';
 import HomeNavigation from '../../components/HomeNavigation';
-
-// Sample announcements data
-const announcements = [
-  {
-    id: 1,
-    title: 'School Closure Due to Weather',
-    content: 'Due to severe weather conditions, all Lincoln Parish Schools will be closed tomorrow, January 15th, 2024. All after-school activities and sporting events are also cancelled. Please check our website and social media for updates.',
-    author: 'Dr. Sarah Johnson',
-    date: '2024-01-14',
-    category: 'Emergency',
-    priority: 'high',
-    isRead: false
-  },
-  {
-    id: 2,
-    title: 'Parent-Teacher Conference Schedule',
-    content: 'Parent-Teacher conferences will be held on February 20th and 21st, 2024. Please schedule your appointment through the parent portal. Conferences will be available both in-person and virtually.',
-    author: 'Principal Michael Davis',
-    date: '2024-01-12',
-    category: 'Academic',
-    priority: 'medium',
-    isRead: true
-  },
-  {
-    id: 3,
-    title: 'New Library Resources Available',
-    content: 'We are excited to announce that our school library now has access to several new digital resources including e-books, research databases, and educational videos. Students can access these resources using their school login credentials.',
-    author: 'Librarian Emily Wilson',
-    date: '2024-01-10',
-    category: 'Resources',
-    priority: 'low',
-    isRead: true
-  },
-  {
-    id: 4,
-    title: 'Sports Team Tryouts Announcement',
-    content: 'Tryouts for spring sports teams will begin next week. Students interested in baseball, softball, track and field, and tennis should sign up in the athletic office. Physical examination forms must be completed before tryouts.',
-    author: 'Athletic Director Robert Brown',
-    date: '2024-01-08',
-    category: 'Athletics',
-    priority: 'medium',
-    isRead: false
-  },
-  {
-    id: 5,
-    title: 'Technology Device Distribution',
-    content: 'All students will receive their assigned Chromebooks and necessary accessories during the first week of school. Parents must sign the technology agreement form before devices can be distributed.',
-    author: 'IT Coordinator Lisa Martinez',
-    date: '2024-01-05',
-    category: 'Technology',
-    priority: 'high',
-    isRead: true
-  },
-  {
-    id: 6,
-    title: 'Community Service Day',
-    content: 'Join us for our annual Community Service Day on March 15th, 2024. Students, parents, and staff are encouraged to participate in various community improvement projects. Registration forms are available in the main office.',
-    author: 'Community Outreach Coordinator',
-    date: '2024-01-03',
-    category: 'Community',
-    priority: 'low',
-    isRead: false
-  }
-];
+import { getActiveAnnouncements } from '../../services/announcementService';
+import type { Announcement } from '../../services/announcementService';
 
 const getPriorityColor = (priority: string) => {
   switch (priority) {
@@ -89,10 +27,28 @@ const getCategoryColor = (category: string) => {
 };
 
 const Announcements = () => {
-  const [selectedAnnouncement, setSelectedAnnouncement] = useState<any>(null);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleViewAnnouncement = (announcement: any) => {
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      setLoading(true);
+      const data = await getActiveAnnouncements();
+      setAnnouncements(data);
+    } catch (error) {
+      console.error('Error fetching announcements:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleViewAnnouncement = (announcement: Announcement) => {
     setSelectedAnnouncement(announcement);
     setModalOpen(true);
   };
@@ -105,6 +61,39 @@ const Announcements = () => {
     });
   };
 
+  const getTimeAgo = (dateString: string) => {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+
+    if (diffInYears > 0) {
+      return diffInYears === 1 ? 'about 1 year ago' : `about ${diffInYears} years ago`;
+    } else if (diffInMonths > 0) {
+      return diffInMonths === 1 ? 'about 1 month ago' : `about ${diffInMonths} months ago`;
+    } else if (diffInDays > 0) {
+      return diffInDays === 1 ? '1 day ago' : `${diffInDays} days ago`;
+    } else {
+      return 'today';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <HomeNavigation />
+        <Container size="lg" className="py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <Text className="mt-2 text-gray-600">Loading announcements...</Text>
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <HomeNavigation />
@@ -115,121 +104,152 @@ const Announcements = () => {
             Announcements
           </Title>
           <Text className="text-gray-600">
-            Stay updated with the latest news and important information from Lincoln Parish Schools
+            Stay updated with the latest news and important information from West Carroll Parish School Board
           </Text>
         </div>
 
-        <div className="grid gap-6">
-          {announcements.map((announcement) => (
-            <Card 
-              key={announcement.id} 
-              shadow="sm" 
-              padding="lg" 
-              radius="md" 
-              withBorder
-              className={`transition-all duration-200 hover:shadow-md ${
-                !announcement.isRead ? 'border-l-4 border-l-blue-500 bg-blue-50' : ''
-              }`}
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex-1">
-                  <Group gap="xs" className="mb-2">
-                    <Title order={3} className="text-xl font-semibold text-gray-900">
+        {announcements.length === 0 ? (
+          <div className="text-center py-12">
+            <Text className="text-gray-500 text-lg">No announcements available</Text>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {announcements.map((announcement) => (
+              <div 
+                key={announcement.id} 
+                className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start space-x-4">
+                  {/* Circular Icon */}
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">LPSB</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    {/* Source */}
+                    <Text size="sm" className="text-gray-500 mb-1">
+                      Lincoln Parish School Board
+                    </Text>
+                    
+                    {/* Title */}
+                    <Title order={3} className="text-lg font-semibold text-gray-900 mb-2">
                       {announcement.title}
                     </Title>
-                    {!announcement.isRead && (
-                      <Badge color="blue" size="sm">NEW</Badge>
-                    )}
-                  </Group>
-                  
-                  <Text 
-                    className="text-gray-600 mb-4 line-clamp-3"
-                    style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
-                  >
-                    {announcement.content}
-                  </Text>
+                    
+                    {/* Content Preview */}
+                    <Text 
+                      className="text-gray-600 mb-3 line-clamp-2"
+                      style={{ 
+                        display: '-webkit-box', 
+                        WebkitLineClamp: 2, 
+                        WebkitBoxOrient: 'vertical', 
+                        overflow: 'hidden' 
+                      }}
+                    >
+                      {announcement.content}
+                    </Text>
+                    
+                    {/* Read More Link */}
+                    <button
+                      onClick={() => handleViewAnnouncement(announcement)}
+                      className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                    >
+                      ... Read More
+                    </button>
+                    
+                    {/* Timestamp */}
+                    <Text size="xs" className="text-gray-400 mt-2">
+                      {getTimeAgo(announcement.createdAt)}
+                    </Text>
+                  </div>
                 </div>
               </div>
-
-              <Group justify="space-between" align="center">
-                <Group gap="md">
-                  <Group gap="xs">
-                    <IconUser size={16} className="text-gray-500" />
-                    <Text size="sm" className="text-gray-600">{announcement.author}</Text>
-                  </Group>
-                  
-                  <Group gap="xs">
-                    <IconCalendar size={16} className="text-gray-500" />
-                    <Text size="sm" className="text-gray-600">{formatDate(announcement.date)}</Text>
-                  </Group>
-                  
-                  <Group gap="xs">
-                    <IconTag size={16} className="text-gray-500" />
-                    <Badge color={getCategoryColor(announcement.category)} variant="light" size="sm">
-                      {announcement.category}
-                    </Badge>
-                  </Group>
-                  
-                  <Badge color={getPriorityColor(announcement.priority)} variant="light" size="sm">
-                    {announcement.priority.toUpperCase()} PRIORITY
-                  </Badge>
-                </Group>
-                
-                <Button
-                  variant="light"
-                  leftSection={<IconEye size={16} />}
-                  onClick={() => handleViewAnnouncement(announcement)}
-                  size="sm"
-                >
-                  View Details
-                </Button>
-              </Group>
-            </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </Container>
 
       {/* Announcement Detail Modal */}
-      <Modal
-        opened={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={selectedAnnouncement?.title}
-        size="lg"
-        centered
-      >
-        {selectedAnnouncement && (
-          <Stack gap="md">
-            <Group gap="xs">
-              <Badge color={getCategoryColor(selectedAnnouncement.category)} variant="light">
-                {selectedAnnouncement.category}
-              </Badge>
-              <Badge color={getPriorityColor(selectedAnnouncement.priority)} variant="light">
-                {selectedAnnouncement.priority.toUpperCase()} PRIORITY
-              </Badge>
-            </Group>
-            
-            <Text className="text-gray-700 leading-relaxed">
-              {selectedAnnouncement.content}
-            </Text>
-            
-            <Group gap="md" className="pt-4 border-t border-gray-200">
-              <Group gap="xs">
-                <IconUser size={16} className="text-gray-500" />
-                <Text size="sm" className="text-gray-600">
-                  <strong>Author:</strong> {selectedAnnouncement.author}
-                </Text>
-              </Group>
+      {modalOpen && selectedAnnouncement && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900">
+                {selectedAnnouncement.title}
+              </h2>
+              <button
+                onClick={() => setModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Badges */}
+              <div className="flex gap-2">
+                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                  getCategoryColor(selectedAnnouncement.category) === 'red' ? 'bg-red-100 text-red-800' :
+                  getCategoryColor(selectedAnnouncement.category) === 'blue' ? 'bg-blue-100 text-blue-800' :
+                  getCategoryColor(selectedAnnouncement.category) === 'green' ? 'bg-green-100 text-green-800' :
+                  getCategoryColor(selectedAnnouncement.category) === 'purple' ? 'bg-purple-100 text-purple-800' :
+                  getCategoryColor(selectedAnnouncement.category) === 'orange' ? 'bg-orange-100 text-orange-800' :
+                  getCategoryColor(selectedAnnouncement.category) === 'teal' ? 'bg-teal-100 text-teal-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}>
+                  {selectedAnnouncement.category}
+                </span>
+                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                  getPriorityColor(selectedAnnouncement.priority) === 'red' ? 'bg-red-100 text-red-800' :
+                  getPriorityColor(selectedAnnouncement.priority) === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
+                  getPriorityColor(selectedAnnouncement.priority) === 'green' ? 'bg-green-100 text-green-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}>
+                  {selectedAnnouncement.priority.toUpperCase()} PRIORITY
+                </span>
+              </div>
               
-              <Group gap="xs">
-                <IconCalendar size={16} className="text-gray-500" />
-                <Text size="sm" className="text-gray-600">
-                  <strong>Date:</strong> {formatDate(selectedAnnouncement.date)}
-                </Text>
-              </Group>
-            </Group>
-          </Stack>
-        )}
-      </Modal>
+              {/* Content */}
+              <div className="text-gray-700 leading-relaxed">
+                {selectedAnnouncement.content}
+              </div>
+              
+              {/* Image if exists */}
+              {selectedAnnouncement.imageUrl && (
+                <div className="mt-4">
+                  <img 
+                    src={selectedAnnouncement.imageUrl} 
+                    alt="Announcement" 
+                    className="w-full max-w-md rounded-lg shadow-md"
+                  />
+                </div>
+              )}
+              
+              {/* Metadata */}
+              <div className="pt-4 border-t border-gray-200 space-y-2">
+                <div className="flex items-center gap-2">
+                  <IconUser size={16} className="text-gray-500" />
+                  <span className="text-sm text-gray-600">
+                    <strong>Author:</strong> {selectedAnnouncement.author}
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <IconCalendar size={16} className="text-gray-500" />
+                  <span className="text-sm text-gray-600">
+                    <strong>Date:</strong> {formatDate(selectedAnnouncement.createdAt)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
