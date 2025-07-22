@@ -1,7 +1,17 @@
 import { MantineLogo } from "@mantinex/mantine-logo";
 import { Link, useLocation } from "react-router-dom";
 import { Tooltip, UnstyledButton, Group, Text, Box, Divider, ActionIcon } from "@mantine/core";
-import { IconLogout, IconMenu2, IconX } from "@tabler/icons-react";
+import { 
+  IconLogout, 
+  IconMenu2, 
+  IconX, 
+  IconDashboard,
+  IconFileText,
+  IconUsers,
+  IconTicket,
+  IconSettings,
+  IconPlus
+} from "@tabler/icons-react";
 import { logout } from "../services/api";
 import { useState } from "react";
 
@@ -11,11 +21,11 @@ interface LinkItem {
   path: string;
 }
 
-interface SideBarProps {
+interface AdminSidebarProps {
   links: LinkItem[];
 }
 
-export function SideBar({ links }: SideBarProps) {
+export function AdminSidebar({ links }: AdminSidebarProps) {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -45,7 +55,7 @@ export function SideBar({ links }: SideBarProps) {
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
           md:translate-x-0 md:w-64 w-80
         `}
-        style={{ paddingTop: '60px' }} // Account for navbar height
+        style={{ paddingTop: '60px' }}
       >
         {/* Logo Section */}
         <Box className="p-6 border-b border-gray-100 bg-white">
@@ -54,7 +64,7 @@ export function SideBar({ links }: SideBarProps) {
               <MantineLogo type="mark" size={28} />
             </div>
             <Text size="lg" fw={700} className="text-gray-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Help Desk
+              Admin Panel
             </Text>
           </Group>
         </Box>
@@ -62,7 +72,7 @@ export function SideBar({ links }: SideBarProps) {
         {/* Navigation Links */}
         <Box className="p-4 flex-1">
           <Text size="xs" fw={600} c="dimmed" className="uppercase tracking-wider mb-4 px-3 text-gray-500">
-            Navigation
+            Administration
           </Text>
           <Group gap="xs" className="flex-col items-stretch">
             {links.map((link) => {
@@ -135,4 +145,4 @@ export function SideBar({ links }: SideBarProps) {
       </Box>
     </>
   );
-}
+} 

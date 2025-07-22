@@ -5,8 +5,9 @@ import Landing from "./components/Landing"
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import UserDashboard from "./pages/Dashboard/UserDashboard";
 import { MantineProvider } from "@mantine/core";
-import { IconGauge, IconHome2, IconTicket, IconUsers } from "@tabler/icons-react";
+import { IconGauge, IconHome2, IconTicket, IconUsers, IconDashboard, IconFileText, IconBuilding, IconBell, IconNews, IconBriefcase, IconUser } from "@tabler/icons-react";
 import { SideBar } from "./layouts/SideBar";
+import { AdminSidebar } from "./components/AdminSidebar";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Navbar } from "./layouts/NavBar";
@@ -16,50 +17,74 @@ import UserTickets from "./pages/Usertickets/UserTickets";
 import UserPage from "./pages/Users/UserPage";
 import LoginPage from "./pages/Login/LoginPage";
 import PublicNotices from "./pages/PublicNotices/PublicNotices";
+import PublicNoticeManagement from "./pages/Admin/PublicNoticeManagement";
+import StaffManagement from "./pages/Admin/StaffManagement";
 import Announcements from "./pages/Announcements/Announcements";
-import Staff from "./pages/Staff/Staff";
-import News from "./pages/News/News";
+import AnnouncementManagement from "./pages/Announcements/AnnouncementManagement";
+import NewsManagement from "./pages/Admin/NewsManagement";
+import JobManagement from "./pages/Admin/JobManagement";
+import StaffPage from "./pages/Staff/Staff";
+import NewsPage from "./pages/News/News";
+import NewsArticle from "./pages/News/NewsArticle";
 import Jobs from "./pages/Jobs/Jobs";
 import BoardMembers from "./pages/BoardMembers/BoardMembers";
 import BoardMinutes from "./pages/BoardMinutes/BoardMinutes";
 import Principals from "./pages/Principals/Principals";
+import BoardMemberManagement from "./pages/Admin/BoardMemberManagement";
 
 function LayoutWithSidebar() {
   const location = useLocation();
   const { user } = useAuth();
 
   // Show home navigation for non-logged-in users and public pages
-  const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals";
+  const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname.startsWith("/news/article/") || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals";
   const isLoggedIn = !!user;
+  
+  // Check if current route is an admin route
+  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname === '/dashboard/admin';
   
   // Only show sidebar and admin/user navbar for logged-in users on dashboard pages
   const showSidebar = isLoggedIn && !isPublicPage;
   const showAdminNavbar = isLoggedIn && !isPublicPage;
 
-  const links = [
-    ...(user?.email === "utsab@wcpsb.com"
-      ? [
-          { icon: IconHome2, label: "Dashboard", path: "/dashboard/admin" },
-          { icon: IconUsers, label: "Users", path: "/dashboard/users" },
-        ]
-      : [
-          { icon: IconGauge, label: "User Dashboard", path: "/dashboard/user" },
-          { icon: IconTicket, label: "My Tickets", path: "/dashboard/tickets" },
-        ]),
+  const userLinks = [
+    { icon: IconGauge, label: "User Dashboard", path: "/dashboard/user" },
+    { icon: IconTicket, label: "My Tickets", path: "/dashboard/tickets" },
+  ];
+
+  const adminLinks = [
+    { icon: IconDashboard, label: 'Dashboard', path: '/admin' },
+    { icon: IconFileText, label: 'Public Notices', path: '/admin/public-notices' },
+    { icon: IconBell, label: 'Announcements', path: '/admin/announcements' },
+    { icon: IconNews, label: 'News Management', path: '/admin/news' },
+    { icon: IconBriefcase, label: 'Job Management', path: '/admin/jobs' },
+    { icon: IconBuilding, label: 'Staff Management', path: '/admin/staff' },
+    { icon: IconUsers, label: 'Board Members', path: '/admin/board-members' },
+    { icon: IconUser, label: 'Users', path: '/admin/users' },
   ];
   
   return (
     <div style={{ display: "flex" }}>
-      {showSidebar && <SideBar links={links} />}
-      <div style={{ flex: 1 }}>
+      {showSidebar && isAdminRoute && <AdminSidebar links={adminLinks} />}
+      {showSidebar && !isAdminRoute && <SideBar links={userLinks} />}
+      <div 
+        style={{ 
+          flex: 1, 
+          marginLeft: showSidebar ? '256px' : '0',
+          transition: 'margin-left 0.3s ease'
+        }}
+        className="min-h-screen bg-gray-50 md:ml-64"
+      >
         {showAdminNavbar && <Navbar />}
-        <Routes>
+        <div style={{ paddingTop: showAdminNavbar ? '60px' : '0' }}>
+          <Routes>
           <Route path="/" element={<Landing/>} />
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/public-notices" element={<PublicNotices/>} />
           <Route path="/announcements" element={<Announcements/>} />
-          <Route path="/staff" element={<Staff/>} />
-          <Route path="/news" element={<News/>} />
+          <Route path="/staff" element={<StaffPage/>} />
+          <Route path="/news" element={<NewsPage/>} />
+          <Route path="/news/article/:articleId" element={<NewsArticle/>} />
           <Route path="/jobs" element={<Jobs/>} />
           <Route path="/board-members" element={<BoardMembers/>} />
           <Route path="/board-minutes" element={<BoardMinutes/>} />
@@ -73,10 +98,66 @@ function LayoutWithSidebar() {
             }
           />
           <Route
-            path="/dashboard/users"
+            path="/admin"
             element={
               <ProtectedRoute>
-                <UserPage></UserPage>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/public-notices"
+            element={
+              <ProtectedRoute>
+                <PublicNoticeManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/staff"
+            element={
+              <ProtectedRoute>
+                <StaffManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute>
+                <UserPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/announcements"
+            element={
+              <ProtectedRoute>
+                <AnnouncementManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/news"
+            element={
+              <ProtectedRoute>
+                <NewsManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/jobs"
+            element={
+              <ProtectedRoute>
+                <JobManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/board-members"
+            element={
+              <ProtectedRoute>
+                <BoardMemberManagement />
               </ProtectedRoute>
             }
           />
@@ -97,6 +178,7 @@ function LayoutWithSidebar() {
             }
           />
         </Routes>
+        </div>
       </div>
     </div>
   );

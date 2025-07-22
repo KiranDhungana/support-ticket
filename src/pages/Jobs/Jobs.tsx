@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaSearch, FaFilter, FaMapMarkerAlt, FaBriefcase, FaClock, FaBuilding, FaEye, FaDownload } from 'react-icons/fa';
 import HomeNavigation from '../../components/HomeNavigation';
 import Pagination from '../../components/Pagination';
+import { getJobs, type Job as JobType } from '../../services/jobService';
 import './Jobs.css';
 
 interface Job {
@@ -305,37 +306,45 @@ const sampleJobs: Job[] = [
 ];
 
 const Jobs: React.FC = () => {
+  const [jobs, setJobs] = useState<JobType[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedType, setSelectedType] = useState('All');
-  const [selectedLocation, setSelectedLocation] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [selectedType, setSelectedType] = useState('All Types');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [selectedJob, setSelectedJob] = useState<JobType | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const jobsPerPage = 6;
 
-  const categories = ['All', 'Technology', 'Marketing', 'Data Science', 'Design', 'Sales', 'Product Management', 'Customer Service', 'Finance', 'Content'];
-  const jobTypes = ['All', 'Full-time', 'Part-time', 'Contract', 'Internship'];
-  const locations = ['All', 'Remote', 'New York, NY', 'Los Angeles, CA', 'San Francisco, CA', 'Chicago, IL', 'Seattle, WA', 'Austin, TX', 'Boston, MA'];
+  const categories = ['All Categories', 'Technology', 'Marketing', 'Data Science', 'Design', 'Sales', 'Product Management', 'Customer Service', 'Finance', 'Content'];
+  const jobTypes = ['All Types', 'Full-time', 'Part-time', 'Contract', 'Internship'];
 
-  const filteredJobs = sampleJobs.filter(job => {
-    const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || job.category === selectedCategory;
-    const matchesType = selectedType === 'All' || job.type === selectedType;
-    const matchesLocation = selectedLocation === 'All' || 
-                           (selectedLocation === 'Remote' ? job.isRemote : job.location === selectedLocation);
-    
-    return matchesSearch && matchesCategory && matchesType && matchesLocation;
-  });
+  useEffect(() => {
+    fetchJobs();
+  }, [currentPage, searchTerm, selectedCategory, selectedType]);
 
-  const indexOfLastJob = currentPage * jobsPerPage;
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
-  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
+  const fetchJobs = async () => {
+    try {
+      setLoading(true);
+      const response = await getJobs(
+        currentPage,
+        6,
+        searchTerm || undefined,
+        selectedCategory === 'All Categories' ? undefined : selectedCategory,
+        selectedType === 'All Types' ? undefined : selectedType
+      );
+      setJobs(response.data);
+      setTotalPages(response.pagination.pages);
+      setTotalItems(response.pagination.total);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const handleJobClick = (job: Job) => {
+  const handleJobClick = (job: JobType) => {
     setSelectedJob(job);
     setShowModal(true);
   };
@@ -404,25 +413,20 @@ const Jobs: React.FC = () => {
               </select>
             </div>
 
-            <div className="filter-group">
-              <label>Location:</label>
-              <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)}>
-                {locations.map(location => (
-                  <option key={location} value={location}>{location}</option>
-                ))}
-              </select>
-            </div>
+
           </div>
         </div>
 
         {/* Results Summary */}
         <div className="results-summary">
-          <p>Showing {filteredJobs.length} of {sampleJobs.length} jobs</p>
+          <p>Showing {jobs.length} of {totalItems} jobs</p>
         </div>
 
         {/* Jobs Grid */}
         <div className="jobs-grid">
-          {currentJobs.map(job => (
+          {loading ? (
+            <div className="loading">Loading jobs...</div>
+          ) : jobs.map(job => (
             <div key={job.id} className="job-card" onClick={() => handleJobClick(job)}>
               <div className="job-header">
                 <div className="job-title-section">
@@ -491,11 +495,13 @@ const Jobs: React.FC = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
+            totalItems={totalItems}
+            itemsPerPage={6}
           />
         )}
 
         {/* No Results */}
-        {filteredJobs.length === 0 && (
+        {!loading && jobs.length === 0 && (
           <div className="no-results">
             <h3>No jobs found</h3>
             <p>Try adjusting your search criteria or filters</p>

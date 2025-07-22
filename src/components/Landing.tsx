@@ -1,7 +1,12 @@
 import { Group, Container, Image, Text, Button } from '@mantine/core';
-import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCurrencyDollar, IconCalendarEvent, IconPencil, IconBook2 } from '@tabler/icons-react';
-import { useState } from 'react';
+import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCurrencyDollar, IconCalendarEvent, IconPencil, IconBook2, IconUser, IconCalendar } from '@tabler/icons-react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import HomeNavigation from './HomeNavigation';
+import { getActiveAnnouncements } from '../services/announcementService';
+import type { Announcement } from '../services/announcementService';
+import { getPublishedNews } from '../services/newsService';
+import type { News } from '../services/newsService';
 
 const heroImages = [
   '/public/Slider1.png',
@@ -10,10 +15,65 @@ const heroImages = [
 ];
 
 const Landing = () => {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [news, setNews] = useState<News[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const next = () => setCurrent((c) => (c + 1) % heroImages.length);
   const prev = () => setCurrent((c) => (c - 1 + heroImages.length) % heroImages.length);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      setLoading(true);
+      const [announcementsData, newsData] = await Promise.all([
+        getActiveAnnouncements(),
+        getPublishedNews(1, 4) // Get 4 latest news articles
+      ]);
+      setAnnouncements(announcementsData);
+      setNews(newsData.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleViewAnnouncement = (announcement: Announcement) => {
+    setSelectedAnnouncement(announcement);
+    setModalOpen(true);
+  };
+
+  const handleViewNews = (newsItem: News) => {
+    console.log('Navigating to news page for:', newsItem.title);
+    navigate(`/news?article=${newsItem.id}`);
+  };
+
+  const getTimeAgo = (dateString: string) => {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+
+    if (diffInYears > 0) {
+      return diffInYears === 1 ? 'about 1 year ago' : `about ${diffInYears} years ago`;
+    } else if (diffInMonths > 0) {
+      return diffInMonths === 1 ? 'about 1 month ago' : `about ${diffInMonths} months ago`;
+    } else if (diffInDays > 0) {
+      return diffInDays === 1 ? '1 day ago' : `${diffInDays} days ago`;
+    } else {
+      return 'today';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -141,95 +201,143 @@ const Landing = () => {
           <div className="flex-1 w-full lg:w-2/3">
             <div className="flex items-center mb-6">
               <span className="font-extrabold text-2xl mr-6">NEWS</span>
-              <a href="#" className="underline text-lg">See All Posts</a>
+              <button 
+                onClick={() => navigate('/news')}
+                className="underline text-lg hover:text-blue-600 transition-colors cursor-pointer"
+              >
+                See All Posts
+              </button>
             </div>
             <div className="flex flex-col gap-8">
-              {/* News Card 1 */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <img src="/public/Slider1.png" alt="news1" className="w-full md:w-60 h-40 object-cover rounded" />
-                <div>
-                  <div className="font-bold text-lg mb-1">End of Year Dibels Results</div>
-                  <div className="text-gray-700 text-sm mb-2">As we wrap up the 2024-2025 school year, we're proud to share exciting results from the K–3 End-of-Year Literacy Screener—showing significant gains in early reading proficiency ac...</div>
+              {loading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Loading news...</p>
                 </div>
-              </div>
-              {/* News Card 2 */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <img src="/public/Slider2.png" alt="news2" className="w-full md:w-60 h-40 object-cover rounded" />
-                <div>
-                  <div className="font-bold text-lg mb-1">Sun Meals 2025</div>
-                  <div className="text-gray-700 text-sm mb-2">Lincoln Parish School Board is participating in the Seamless Summer Option (SSO). Meals will be provided to all eligible children without charge. Acceptance and participating requ...</div>
+              ) : news.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-600">No news articles available.</p>
                 </div>
-              </div>
-              {/* News Card 3 */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <img src="/public/Slider3.png" alt="news3" className="w-full md:w-60 h-40 object-cover rounded" />
-                <div>
-                  <div className="font-bold text-lg mb-1">Lincoln Parish School District Seeks Community Input on School Zoning and Future Planning</div>
-                  <div className="text-gray-700 text-sm mb-2">The Lincoln Parish School District is seeking input from residents to help shape the future of local schools. As the parish continues to grow and evolve, district leaders are ex...</div>
-                </div>
-              </div>
-              {/* News Card 4 */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <img src="/public/Slider4.png" alt="news4" className="w-full md:w-60 h-40 object-cover rounded" />
-                <div>
-                  <div className="font-bold text-lg mb-1">Graduation Season is Here!</div>
-                  <div className="text-gray-700 text-sm mb-2">We're so proud of the Class of 2025! Mark your calendars for the upcoming high school graduation ceremonies across Lincoln Parish: Simsboro High School – Tuesday, May 13 at 7:00...</div>
-                </div>
-              </div>
+              ) : (
+                <>
+                  {/* Featured News */}
+                  {news.length > 0 && (
+                    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                      <div className="flex flex-col lg:flex-row gap-3">
+                        <img 
+                          src={news[0].imageUrl || '/public/Slider1.png'} 
+                          alt={news[0].title} 
+                          className="w-full lg:w-60 h-32 object-cover rounded-lg" 
+                        />
+                        <div className="flex-1">
+                          <div className="text-xs text-blue-600 font-semibold mb-1">FEATURED NEWS</div>
+                          <div className="font-bold text-lg mb-2">{news[0].title}</div>
+                          <div className="text-gray-700 text-xs mb-2">
+                            {news[0].summary || news[0].content.substring(0, 100)}...
+                          </div>
+                          <div className="text-gray-500 text-xs mb-2">
+                            By {news[0].author} • {getTimeAgo(news[0].publishedAt || news[0].createdAt)}
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewNews(news[0]);
+                            }}
+                            className="bg-blue-600 text-white px-4 py-1 rounded text-xs hover:bg-blue-700 transition-colors font-semibold"
+                          >
+                            Read Full Article
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Other News */}
+                  {news.slice(1).map((newsItem) => (
+                    <div key={newsItem.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="flex flex-col sm:flex-row">
+                        <div className="flex-1 p-2">
+                          <div className="font-bold text-base mb-1 text-gray-900 leading-tight">
+                            {newsItem.title}
+                          </div>
+                          <div className="text-gray-600 text-xs mb-1">
+                            By {newsItem.author}
+                          </div>
+                          <div className="text-gray-700 text-xs mb-1 leading-relaxed">
+                            {newsItem.summary || newsItem.content.substring(0, 60)}...
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewNews(newsItem);
+                            }}
+                            className="text-blue-600 hover:text-blue-800 font-semibold text-xs underline"
+                          >
+                            Read Full Article →
+                          </button>
+                        </div>
+                        <div className="sm:w-32 flex-shrink-0">
+                          <img 
+                            src={newsItem.imageUrl || '/public/Slider1.png'} 
+                            alt={newsItem.title} 
+                            className="w-full h-full object-cover" 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           </div>
           {/* ANNOUNCEMENTS COLUMN */}
           <div className="flex-1 w-full lg:w-1/3 mt-8 lg:mt-0">
             <div className="flex items-center mb-6">
               <span className="font-extrabold text-2xl mr-6">ANNOUNCEMENTS</span>
-              <a href="#" className="underline text-lg">See All Posts</a>
+              <button 
+                onClick={() => navigate('/announcements')}
+                className="underline text-lg hover:text-blue-600 transition-colors cursor-pointer"
+              >
+                See All Posts
+              </button>
             </div>
             <div className="flex flex-col gap-6">
-              {/* Announcement 1 */}
-              <div className="flex gap-3 items-start">
-                <img src="/public/Logo.png" alt="logo" className="w-10 h-10 object-contain rounded" />
-                <div>
-                  <div className="font-semibold text-sm">Lincoln Parish School Board</div>
-                  <div className="text-gray-700 text-xs mb-1">The LPSB Child Nutrition Program is seeking dedicated and passionate food service cooks to join our team. The ideal candidates will have a strong background in food preparation, cu... <span className="font-semibold text-blue-900">Read More</span></div>
-                  <div className="text-gray-400 text-xs">21 days ago</div>
+              {loading ? (
+                <div className="text-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+                  <div className="text-gray-500 text-xs mt-2">Loading announcements...</div>
                 </div>
-              </div>
-              {/* Announcement 2 */}
-              <div className="flex gap-3 items-start">
-                <img src="/public/Logo.png" alt="logo" className="w-10 h-10 object-contain rounded" />
-                <div>
-                  <div className="font-semibold text-sm">Lincoln Parish School Board</div>
-                  <div className="text-gray-700 text-xs mb-1">Lincoln Parish Schools End of Year Update: Due to the lack of school closures this year, all required instructional minutes will have been met earlier than expected. Because of thi... <span className="font-semibold text-blue-900">Read More</span></div>
-                  <div className="text-gray-400 text-xs">about 2 months ago</div>
+              ) : announcements.length === 0 ? (
+                <div className="text-center py-4">
+                  <div className="text-gray-500 text-xs">No announcements available</div>
                 </div>
-              </div>
-              {/* Announcement 3 */}
-              <div className="flex gap-3 items-start">
-                <img src="/public/Logo.png" alt="logo" className="w-10 h-10 object-contain rounded" />
-                <div>
-                  <div className="font-semibold text-sm">Lincoln Parish School Board</div>
-                  <div className="text-gray-700 text-xs mb-1">The Lincoln Parish School Board will meet at 12:00 on Thursday, November, 7 at Ruston High. The agenda can be found at ... <span className="font-semibold text-blue-900">Read More</span></div>
-                  <div className="text-gray-400 text-xs">8 months ago</div>
-                </div>
-              </div>
-              {/* Announcement 4 */}
-              <div className="flex gap-3 items-start">
-                <img src="/public/Logo.png" alt="logo" className="w-10 h-10 object-contain rounded" />
-                <div>
-                  <div className="font-semibold text-sm">Lincoln Parish School Board</div>
-                  <div className="text-gray-700 text-xs mb-1">If your child didn't get the $120 on your SNAP card or didn't receive a Sun Bucks card for your child in the mail, here's what you need to know: Application Date: As of Augus... <span className="font-semibold text-blue-900">Read More</span></div>
-                  <div className="text-gray-400 text-xs">11 months ago</div>
-                </div>
-              </div>
-              {/* Announcement 5 */}
-              <div className="flex gap-3 items-start">
-                <img src="/public/Logo.png" alt="logo" className="w-10 h-10 object-contain rounded" />
-                <div>
-                  <div className="font-semibold text-sm">Lincoln Parish School Board</div>
-                  <div className="text-gray-700 text-xs mb-1">Lincoln Parish School Board is participating in the Summer Food Service Program. Meals will be provided to all eligible children without charge. Acceptance and participating requir... <span className="font-semibold text-blue-900">Read More</span></div>
-                  <div className="text-gray-400 text-xs">about 1 year ago</div>
-                </div>
-              </div>
+              ) : (
+                announcements.slice(0, 5).map((announcement) => (
+                  <div key={announcement.id} className="flex gap-3 items-start">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">LPSB</span>
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-sm">Lincoln Parish School Board</div>
+                      <div className="text-gray-700 text-xs mb-1">
+                        {announcement.content.length > 150 
+                          ? `${announcement.content.substring(0, 150)}... ` 
+                          : announcement.content
+                        }
+                        <button
+                          onClick={() => handleViewAnnouncement(announcement)}
+                          className="font-semibold text-blue-900 hover:text-blue-700 cursor-pointer"
+                        >
+                          Read More
+                        </button>
+                      </div>
+                      <div className="text-gray-400 text-xs">{getTimeAgo(announcement.createdAt)}</div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -240,10 +348,10 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {/* Contact/Logo */}
           <div>
-            <img src="/public/Logo.png" alt="Lincoln Parish Schools Logo" className="w-20 h-20 mb-3" />
+                            <img src="/public/Logo.png" alt="West Carroll Parish School Board Logo" className="w-20 h-20 mb-3" />
             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">Find Us</h3>
             <div className="text-gray-700 text-sm flex flex-col gap-1">
-              <span>Lincoln Parish Schools</span>
+                              <span>West Carroll Parish School Board</span>
               <span className="flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-900' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/></svg>410 South Farmerville Street</span>
               <span>Ruston, LA 71270</span>
               <a href="tel:3182551430" className="text-blue-700 hover:underline flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-900' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z'/></svg>318-255-1430</a>
@@ -255,7 +363,7 @@ const Landing = () => {
           <div>
             <h3 className="font-bold text-lg mb-2">Schools</h3>
             <ul className="text-gray-700 text-sm space-y-1">
-              <li>Lincoln Parish Schools</li>
+                              <li>West Carroll Parish School Board</li>
               <li>Choudrant High School</li>
               <li>Choudrant Elementary School</li>
               <li>Cypress Springs Elementary</li>
@@ -300,11 +408,81 @@ const Landing = () => {
           </div>
         </div>
         <div className="border-t border-gray-300 text-center text-xs text-gray-500 py-4 bg-gray-100">
-          Copyright © 2025 Lincoln Parish Schools. All rights reserved.<br />Powered By Apptegy
+                      Copyright © 2025 West Carroll Parish School Board. All rights reserved.<br />Powered By Apptegy
         </div>
       </footer>
+
+      {/* Announcement Detail Modal */}
+      {modalOpen && selectedAnnouncement && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900">
+                {selectedAnnouncement.title}
+              </h2>
+              <button
+                onClick={() => setModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Badges */}
+              <div className="flex gap-2">
+                <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                  {selectedAnnouncement.category}
+                </span>
+                <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                  {selectedAnnouncement.priority.toUpperCase()} PRIORITY
+                </span>
+              </div>
+              
+              {/* Content */}
+              <div className="text-gray-700 leading-relaxed">
+                {selectedAnnouncement.content}
+              </div>
+              
+              {/* Image if exists */}
+              {selectedAnnouncement.imageUrl && (
+                <div className="mt-4">
+                  <img 
+                    src={selectedAnnouncement.imageUrl} 
+                    alt="Announcement" 
+                    className="w-full max-w-md rounded-lg shadow-md"
+                  />
+                </div>
+              )}
+              
+              {/* Metadata */}
+              <div className="pt-4 border-t border-gray-200 space-y-2">
+                <div className="flex items-center gap-2">
+                  <IconUser size={16} className="text-gray-500" />
+                  <span className="text-sm text-gray-600">
+                    <strong>Author:</strong> {selectedAnnouncement.author}
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <IconCalendar size={16} className="text-gray-500" />
+                  <span className="text-sm text-gray-600">
+                    <strong>Date:</strong> {new Date(selectedAnnouncement.createdAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 };
 
-export default Landing
+export default Landing;

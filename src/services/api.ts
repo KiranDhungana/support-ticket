@@ -43,6 +43,10 @@ export const loginWithGoogle = async (token: string) => {
 export const getTickets = () => {
   return API.get("/tickets");
 };
+
+export const getDashboardStats = () => {
+  return API.get("/tickets/dashboard-stats");
+};
 export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
@@ -98,4 +102,29 @@ export const promoteUser = async (userId: string) => {
     console.error("Error In promoting user:", error);
     return false;
   }
+};
+
+// Public Notice API functions
+export const getPublicNotices = () => {
+  return API.get("/public-notices");
+};
+
+export const getPublicNoticeById = (id: string) => {
+  return API.get(`/public-notices/${id}`);
+};
+
+export const createPublicNotice = (noticeData: any) => {
+  return API.post("/public-notices", noticeData);
+};
+
+export const updatePublicNotice = (id: string, noticeData: any) => {
+  return API.put(`/public-notices/${id}`, noticeData);
+};
+
+export const deletePublicNotice = (id: string) => {
+  return API.delete(`/public-notices/${id}`);
+};
+
+export const getPublicNoticesByCategory = (category: string) => {
+  return API.get(`/public-notices/category/${category}`);
 };

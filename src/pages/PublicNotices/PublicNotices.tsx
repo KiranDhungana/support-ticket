@@ -1,20 +1,16 @@
-import { useState } from 'react';
-import { Card, Text, Button, Modal, Group, Badge, Stack, Container, Title, Breadcrumbs, Anchor } from '@mantine/core';
-import { IconFileText, IconDownload, IconEye, IconCalendar, IconUser } from '@tabler/icons-react';
+import { useState, useEffect } from 'react';
+import { Card, Text, Button, Group, Badge, Stack, Container, Title, Breadcrumbs, Anchor, Image, LoadingOverlay } from '@mantine/core';
+import { IconFileText, IconDownload, IconEye, IconCalendar, IconUser, IconPhoto } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
+import { createPortal } from 'react-dom';
 import HomeNavigation from '../../components/HomeNavigation';
+import { getPublicNotices } from '../../services/publicNoticeService';
+import type { PublicNotice } from '../../services/publicNoticeService';
 
-interface Notice {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  date: string;
-  author: string;
-  pdfUrl: string;
-  fileSize: string;
-}
+type Notice = PublicNotice;
 
-const notices: Notice[] = [
+// Sample data for fallback (when API is not available)
+const sampleNotices: Notice[] = [
   {
     id: '1',
     title: '2024-2025 Lincoln Parish School Wellness Policy',
@@ -34,96 +30,6 @@ const notices: Notice[] = [
     author: 'Facilities Department',
     pdfUrl: '/sample-pdf.pdf',
     fileSize: '1.8 MB'
-  },
-  {
-    id: '3',
-    title: 'Charter School Application Process',
-    description: 'Guidelines and procedures for charter school applications and approval process.',
-    category: 'Administration',
-    date: '2024-06-10',
-    author: 'Office of Charter Schools',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '3.1 MB'
-  },
-  {
-    id: '4',
-    title: 'COVID-19 Information',
-    description: 'Current COVID-19 protocols, guidelines, and safety measures for students and staff.',
-    category: 'Health',
-    date: '2024-08-01',
-    author: 'Health Services',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '1.5 MB'
-  },
-  {
-    id: '5',
-    title: 'Cohort Graduation Rate',
-    description: 'Annual report on cohort graduation rates and student achievement metrics.',
-    category: 'Report',
-    date: '2024-05-15',
-    author: 'Data & Assessment',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '2.7 MB'
-  },
-  {
-    id: '6',
-    title: 'District Guidelines and Policies for Faculty and Staff',
-    description: 'Comprehensive handbook of district policies, procedures, and guidelines for all employees.',
-    category: 'Policy',
-    date: '2024-07-30',
-    author: 'Human Resources',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '4.2 MB'
-  },
-  {
-    id: '7',
-    title: 'Equal Employment Opportunity',
-    description: 'Equal employment opportunity policy and non-discrimination guidelines.',
-    category: 'Policy',
-    date: '2024-06-25',
-    author: 'Human Resources',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '1.2 MB'
-  },
-  {
-    id: '8',
-    title: 'Federal Programs Stakeholder Engagement',
-    description: 'Information about federal programs and stakeholder engagement opportunities.',
-    category: 'Program',
-    date: '2024-08-05',
-    author: 'Federal Programs',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '2.9 MB'
-  },
-  {
-    id: '9',
-    title: 'Fight Fraud',
-    description: 'Fraud prevention guidelines and reporting procedures for district operations.',
-    category: 'Compliance',
-    date: '2024-07-12',
-    author: 'Internal Audit',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '1.6 MB'
-  },
-  {
-    id: '10',
-    title: 'K-2 ARC Local Review',
-    description: 'Local review process and guidelines for K-2 ARC (Assessment and Reporting) implementation.',
-    category: 'Assessment',
-    date: '2024-06-18',
-    author: 'Curriculum & Instruction',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '2.1 MB'
-  },
-  {
-    id: '11',
-    title: 'Lincoln Parish Pupil Progression Plan',
-    description: 'Comprehensive pupil progression plan outlining academic advancement criteria and procedures.',
-    category: 'Policy',
-    date: '2024-08-10',
-    author: 'Curriculum & Instruction',
-    pdfUrl: '/sample-pdf.pdf',
-    fileSize: '3.8 MB'
   }
 ];
 
@@ -142,8 +48,33 @@ const getCategoryColor = (category: string) => {
 };
 
 const PublicNotices = () => {
+  const [notices, setNotices] = useState<Notice[]>(sampleNotices);
+  const [loading, setLoading] = useState(true);
   const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
   const [pdfModalOpen, setPdfModalOpen] = useState(false);
+
+  // Fetch notices from API
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        setLoading(true);
+        const data = await getPublicNotices();
+        setNotices(data);
+      } catch (error) {
+        console.error('Error fetching notices:', error);
+        notifications.show({
+          title: 'Warning',
+          message: 'Using sample data. Some features may be limited.',
+          color: 'yellow'
+        });
+        // Keep using sample data
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotices();
+  }, []);
 
   const handleViewPdf = (notice: Notice) => {
     setSelectedNotice(notice);
@@ -159,7 +90,7 @@ const PublicNotices = () => {
   };
 
   const breadcrumbItems = [
-    { title: 'Lincoln Parish Schools', href: '/' },
+            { title: 'West Carroll Parish School Board', href: '/' },
     { title: 'Public Notices', href: '/public-notices' }
   ].map((item, index) => (
     <Anchor href={item.href} key={index} size="sm">
@@ -189,7 +120,7 @@ const PublicNotices = () => {
                 Public Notices
               </Title>
               <Text size="sm" color="dimmed" mt={4}>
-                Official documents, policies, and important information from Lincoln Parish Schools
+                Official documents, policies, and important information from West Carroll Parish School Board
               </Text>
             </div>
           </div>
@@ -197,11 +128,24 @@ const PublicNotices = () => {
       </div>
 
       {/* Content */}
-      <Container size="xl" py="xl">
+      <Container size="xl" py="xl" pos="relative">
+        <LoadingOverlay visible={loading} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {notices.map((notice) => (
             <Card key={notice.id} shadow="sm" padding="lg" radius="md" withBorder>
               <Stack gap="md">
+                {/* Image Preview */}
+                {notice.imageUrl && (
+                  <div className="h-48 overflow-hidden rounded-lg">
+                    <Image
+                      src={notice.imageUrl}
+                      alt={notice.title}
+                      height={192}
+                      className="w-full object-cover"
+                    />
+                  </div>
+                )}
+                
                 <div>
                   <Group justify="space-between" mb="xs">
                     <Badge color={getCategoryColor(notice.category)} variant="light">
@@ -258,63 +202,174 @@ const PublicNotices = () => {
         </div>
       </Container>
 
-      {/* PDF Modal */}
-      <Modal
-        opened={pdfModalOpen}
-        onClose={() => setPdfModalOpen(false)}
-        size="90vw"
-        title={selectedNotice?.title}
-        styles={{
-          title: { fontSize: '1.1rem', fontWeight: 600 }
-        }}
-      >
-        {selectedNotice && (
-          <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <Group gap="lg">
+      {/* Notice Details Modal */}
+      {pdfModalOpen && selectedNotice && createPortal(
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '24px',
+            borderRadius: '12px',
+            minWidth: '600px',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            overflow: 'auto'
+          }}>
+            <div style={{ marginBottom: '20px' }}>
+              <h2 style={{ margin: '0 0 8px 0', fontSize: '20px', fontWeight: '600' }}>
+                {selectedNotice.title}
+              </h2>
+              <button 
+                onClick={() => setPdfModalOpen(false)}
+                style={{
+                  position: 'absolute',
+                  top: '16px',
+                  right: '16px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  color: '#666'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Notice Information */}
+              <div style={{ 
+                backgroundColor: '#f8f9fa', 
+                padding: '16px', 
+                borderRadius: '8px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '16px'
+              }}>
                 <div>
-                  <Text size="sm" fw={500}>Category</Text>
+                  <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500', fontSize: '14px' }}>Category</label>
                   <Badge color={getCategoryColor(selectedNotice.category)} variant="light">
                     {selectedNotice.category}
                   </Badge>
                 </div>
                 <div>
-                  <Text size="sm" fw={500}>Date</Text>
+                  <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500', fontSize: '14px' }}>Date</label>
                   <Text size="sm">{new Date(selectedNotice.date).toLocaleDateString()}</Text>
                 </div>
                 <div>
-                  <Text size="sm" fw={500}>Author</Text>
+                  <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500', fontSize: '14px' }}>Author</label>
                   <Text size="sm">{selectedNotice.author}</Text>
                 </div>
                 <div>
-                  <Text size="sm" fw={500}>File Size</Text>
+                  <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500', fontSize: '14px' }}>File Size</label>
                   <Text size="sm">{selectedNotice.fileSize}</Text>
                 </div>
-              </Group>
+              </div>
+
+              {/* Image Preview */}
+              {selectedNotice.imageUrl && (
+                <div>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Preview Image</label>
+                  <div style={{ 
+                    border: '1px solid #ddd', 
+                    borderRadius: '8px', 
+                    overflow: 'hidden',
+                    maxHeight: '300px'
+                  }}>
+                    <img 
+                      src={selectedNotice.imageUrl} 
+                      alt={selectedNotice.title}
+                      style={{ 
+                        width: '100%', 
+                        height: 'auto',
+                        maxHeight: '300px',
+                        objectFit: 'cover'
+                      }} 
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Description */}
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Description</label>
+                <div style={{ 
+                  backgroundColor: '#f8f9fa', 
+                  padding: '12px', 
+                  borderRadius: '6px',
+                  border: '1px solid #ddd'
+                }}>
+                  <Text size="sm" style={{ lineHeight: '1.5' }}>
+                    {selectedNotice.description}
+                  </Text>
+                </div>
+              </div>
+
+              {/* PDF Viewer */}
+              <div>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Document</label>
+                <div style={{ 
+                  border: '1px solid #ddd', 
+                  borderRadius: '8px', 
+                  overflow: 'hidden',
+                  height: '400px'
+                }}>
+                  <iframe
+                    src={`${selectedNotice.pdfUrl}#toolbar=1&navpanes=1&scrollbar=1`}
+                    width="100%"
+                    height="100%"
+                    title={selectedNotice.title}
+                    style={{ border: 'none' }}
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                <button 
+                  onClick={() => setPdfModalOpen(false)}
+                  style={{
+                    padding: '10px 20px',
+                    border: '1px solid #ddd',
+                    borderRadius: '6px',
+                    background: 'white',
+                    cursor: 'pointer',
+                    fontSize: '14px'
+                  }}
+                >
+                  Close
+                </button>
+                <button 
+                  onClick={() => handleDownloadPdf(selectedNotice)}
+                  style={{
+                    padding: '10px 20px',
+                    border: 'none',
+                    borderRadius: '6px',
+                    background: '#007bff',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '14px'
+                  }}
+                >
+                  Download PDF
+                </button>
+              </div>
             </div>
-            
-            <div className="border rounded-lg overflow-hidden" style={{ height: '70vh' }}>
-              <iframe
-                src={`${selectedNotice.pdfUrl}#toolbar=1&navpanes=1&scrollbar=1`}
-                width="100%"
-                height="100%"
-                title={selectedNotice.title}
-                className="border-0"
-              />
-            </div>
-            
-            <Group justify="flex-end">
-              <Button
-                variant="outline"
-                leftSection={<IconDownload size={16} />}
-                onClick={() => handleDownloadPdf(selectedNotice)}
-              >
-                Download PDF
-              </Button>
-            </Group>
           </div>
-        )}
-      </Modal>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
