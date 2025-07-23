@@ -98,7 +98,7 @@ const UserPage = () => {
     
     setIsSubmitting(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${editingUser.id}`, {
+      const response = await fetch(`http://api.82.25.95.230.nip.io/api/users/${editingUser.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

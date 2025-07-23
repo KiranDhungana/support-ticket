@@ -136,7 +136,7 @@ const TicketTable: React.FC<TicketTableProps> = ({ data, refreshTickets, isAdmin
     
     setIsSubmitting(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/tickets/${selectedTicket.id}`, {
+      const response = await fetch(`http://api.82.25.95.230.nip.io/api/tickets/${selectedTicket.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

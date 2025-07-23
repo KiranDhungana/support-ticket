@@ -2,9 +2,7 @@ import { notifications } from "@mantine/notifications";
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' 
-    ? "http://api.82.25.95.230.nip.io/api"
-    : "http://localhost:5000/api",
+  baseURL: "http://api.82.25.95.230.nip.io/api",
 });
 
 API.interceptors.request.use(
@@ -36,11 +34,7 @@ API.interceptors.response.use(
 export default API;
 
 export const loginWithGoogle = async (token: string) => {
-  const baseURL = process.env.NODE_ENV === 'production' 
-    ? "http://api.82.25.95.230.nip.io/api"
-    : "http://localhost:5000/api";
-    
-  const response = await axios.post(`${baseURL}/auth/google`, {
+  const response = await axios.post("http://api.82.25.95.230.nip.io/api/auth/google", {
     token,
   });
   return response.data;
