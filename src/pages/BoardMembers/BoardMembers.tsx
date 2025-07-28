@@ -69,7 +69,7 @@ const BoardMembers = () => {
   };
 
   const breadcrumbItems = [
-  { title: 'Lincoln Parish Schools', href: '/' },
+          { title: 'West Carroll Parish Schools', href: '/' },
   { title: 'Leadership', href: '#' },
   { title: 'Board Members', href: '/board-members' }
 ].map((item, index) => (
@@ -100,8 +100,8 @@ const BoardMembers = () => {
         <div className="mb-8">
           <Group gap="md" align="center" className="mb-4">
             <div className="flex items-center gap-3">
-              <img src="/public/Logo.png" alt="Logo" className="w-12 h-12" />
-              <Title order={1} className="text-4xl font-bold text-red-600">
+              <img src="/src/assets/logo.png" alt="Logo" className="w-12 h-12" />
+                              <Title order={1} className="text-4xl font-bold wcpsb-gold">
                 Board Members
               </Title>
             </div>

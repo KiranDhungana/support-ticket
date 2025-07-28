@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Custom Blue and Gold Theme Colors */
+:root {
+  --wcpsb-blue: #1e40af;
+  --wcpsb-gold: #d97706;
+  --wcpsb-blue-light: #3b82f6;
+  --wcpsb-gold-light: #f59e0b;
+}
+
 a {
   font-weight: 500;
   /* color: #646cff; */
@@ -50,4 +58,29 @@ button:focus-visible {
 .dropdown-button:hover {
   border: 0px solid transparent !important;
   background-color: transparent !important;
+}
+
+/* Custom WCPSB Theme Classes */
+.wcpsb-blue {
+  color: var(--wcpsb-blue);
+}
+
+.wcpsb-gold {
+  color: var(--wcpsb-gold);
+}
+
+.bg-wcpsb-blue {
+  background-color: var(--wcpsb-blue);
+}
+
+.bg-wcpsb-gold {
+  background-color: var(--wcpsb-gold);
+}
+
+.border-wcpsb-blue {
+  border-color: var(--wcpsb-blue);
+}
+
+.border-wcpsb-gold {
+  border-color: var(--wcpsb-gold);
 }

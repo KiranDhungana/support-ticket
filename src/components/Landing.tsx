@@ -88,7 +88,7 @@ const Landing = () => {
           style={{ filter: 'brightness(0.95)' }}
         />
         <div className="relative z-10 w-full flex flex-col items-center pb-10">
-          <Text className="text-white text-4xl sm:text-5xl font-bold drop-shadow-lg mb-2">Hillcrest Elementary.</Text>
+          <Text className="text-white text-4xl sm:text-5xl font-bold drop-shadow-lg mb-2">West Carroll Parish School Board</Text>
           <div className="flex items-center gap-4 mt-4">
             <div className="flex gap-2">
               {heroImages.map((_, idx) => (
@@ -128,8 +128,8 @@ const Landing = () => {
       </div>
 
       {/* Blue Widget Row */}
-      <div className="bg-[#0a3d6a] w-full py-8 px-2 flex flex-col items-center">
-        <div className="w-full max-w-7xl flex flex-col md:flex-row justify-between items-stretch divide-y md:divide-y-0 md:divide-x divide-blue-800">
+      <div className="bg-wcpsb-blue w-full py-8 px-2 flex flex-col items-center">
+                    <div className="w-full max-w-7xl flex flex-col md:flex-row justify-between items-stretch divide-y md:divide-y-0 md:divide-x divide-blue-700">
           {/* Widget 1 */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <IconChalkboard size={48} stroke={1.5} className="text-white mb-2" />
@@ -159,7 +159,7 @@ const Landing = () => {
       </div>
 
       {/* Calendar Section */}
-      <div className="bg-[#0a3d6a] w-full py-8 flex flex-col items-center">
+      <div className="bg-wcpsb-blue w-full py-8 flex flex-col items-center">
         <div className="w-full max-w-7xl px-2">
           <div className="flex flex-col sm:flex-row items-start sm:items-center mb-6 gap-2 sm:gap-6">
             <span className="text-white font-extrabold text-3xl mr-6">CALENDAR</span>
@@ -168,25 +168,25 @@ const Landing = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Event 1 */}
             <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-900 font-bold text-xl mb-2">Jul 8</span>
+              <span className="text-blue-800 font-bold text-xl mb-2">Jul 8</span>
               <span className="text-gray-700 text-sm mb-1">6:00 PM — 7:30 PM</span>
               <span className="text-gray-900 font-medium">School Board Meeting</span>
             </div>
             {/* Event 2 */}
             <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-900 font-bold text-xl mb-2">Aug 11 — Aug 13</span>
+              <span className="text-blue-800 font-bold text-xl mb-2">Aug 11 — Aug 13</span>
               <span className="text-gray-700 text-sm mb-1">ALL DAY</span>
               <span className="text-gray-900 font-medium">Staff Development (No Students)</span>
             </div>
             {/* Event 3 */}
             <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-900 font-bold text-xl mb-2">Aug 14</span>
+              <span className="text-blue-800 font-bold text-xl mb-2">Aug 14</span>
               <span className="text-gray-700 text-sm mb-1">ALL DAY</span>
               <span className="text-gray-900 font-medium">First Day for 1st-12th Grade Students (Full Day)</span>
             </div>
             {/* Event 4 */}
             <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-900 font-bold text-xl mb-2">Aug 14 — Aug 19</span>
+              <span className="text-blue-800 font-bold text-xl mb-2">Aug 14 — Aug 19</span>
               <span className="text-gray-700 text-sm mb-1">ALL DAY</span>
               <span className="text-gray-900 font-medium">Pre-K and Kindergarten Screeening</span>
             </div>
@@ -230,7 +230,7 @@ const Landing = () => {
                           className="w-full lg:w-60 h-32 object-cover rounded-lg" 
                         />
                         <div className="flex-1">
-                          <div className="text-xs text-blue-600 font-semibold mb-1">FEATURED NEWS</div>
+                          <div className="text-xs text-blue-700 font-semibold mb-1">FEATURED NEWS</div>
                           <div className="font-bold text-lg mb-2">{news[0].title}</div>
                           <div className="text-gray-700 text-xs mb-2">
                             {news[0].summary || news[0].content.substring(0, 100)}...
@@ -243,7 +243,7 @@ const Landing = () => {
                               e.stopPropagation();
                               handleViewNews(news[0]);
                             }}
-                            className="bg-blue-600 text-white px-4 py-1 rounded text-xs hover:bg-blue-700 transition-colors font-semibold"
+                            className="bg-blue-700 text-white px-4 py-1 rounded text-xs hover:bg-blue-800 transition-colors font-semibold"
                           >
                             Read Full Article
                           </button>
@@ -271,7 +271,7 @@ const Landing = () => {
                               e.stopPropagation();
                               handleViewNews(newsItem);
                             }}
-                            className="text-blue-600 hover:text-blue-800 font-semibold text-xs underline"
+                            className="text-blue-700 hover:text-blue-800 font-semibold text-xs underline"
                           >
                             Read Full Article →
                           </button>
@@ -314,13 +314,13 @@ const Landing = () => {
               ) : (
                 announcements.slice(0, 5).map((announcement) => (
                   <div key={announcement.id} className="flex gap-3 items-start">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="w-6 h-6 bg-blue-700 rounded-full flex items-center justify-center">
                         <span className="text-white text-xs font-bold">LPSB</span>
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm">Lincoln Parish School Board</div>
+                      <div className="font-semibold text-sm">West Carroll Parish School Board</div>
                       <div className="text-gray-700 text-xs mb-1">
                         {announcement.content.length > 150 
                           ? `${announcement.content.substring(0, 150)}... ` 
@@ -328,7 +328,7 @@ const Landing = () => {
                         }
                         <button
                           onClick={() => handleViewAnnouncement(announcement)}
-                          className="font-semibold text-blue-900 hover:text-blue-700 cursor-pointer"
+                          className="font-semibold text-blue-700 hover:text-blue-800 cursor-pointer"
                         >
                           Read More
                         </button>
@@ -348,14 +348,14 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {/* Contact/Logo */}
           <div>
-                            <img src="/public/Logo.png" alt="West Carroll Parish School Board Logo" className="w-20 h-20 mb-3" />
+            <img src="/src/assets/logo.png" alt="West Carroll Parish School Board Logo" className="w-20 h-20 mb-3" />
             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">Find Us</h3>
             <div className="text-gray-700 text-sm flex flex-col gap-1">
-                              <span>West Carroll Parish School Board</span>
-              <span className="flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-900' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/></svg>410 South Farmerville Street</span>
-              <span>Ruston, LA 71270</span>
-              <a href="tel:3182551430" className="text-blue-700 hover:underline flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-900' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z'/></svg>318-255-1430</a>
-              <a href="tel:3182551433" className="text-blue-700 hover:underline flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-900' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z'/></svg>318-255-1433</a>
+              <span>West Carroll Parish School Board</span>
+              <span className="flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-700' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/></svg>410 Willis Street</span>
+              <span>Oak Grove, LA 71263</span>
+              <a href="tel:3184282378" className="text-blue-700 hover:underline flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-700' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z'/></svg>318-428-2378</a>
+              <a href="tel:3184283775" className="text-blue-700 hover:underline flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' className='inline w-4 h-4 text-blue-700' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'><path d='M22 16.92V19a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.05.37 2.07.72 3.06a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.99.35 2.01.59 3.06.72A2 2 0 0 1 22 16.92z'/></svg>318-428-3775 (Fax)</a>
             </div>
           </div>
 
@@ -363,20 +363,9 @@ const Landing = () => {
           <div>
             <h3 className="font-bold text-lg mb-2">Schools</h3>
             <ul className="text-gray-700 text-sm space-y-1">
-                              <li>West Carroll Parish School Board</li>
-              <li>Choudrant High School</li>
-              <li>Choudrant Elementary School</li>
-              <li>Cypress Springs Elementary</li>
-              <li>Dubach Elementary School</li>
-              <li>Ruston Elementary School</li>
-              <li>Glen View Elementary School</li>
-              <li>Hillcrest Elementary School</li>
-              <li>I.A. Lewis School</li>
-              <li>Ruston High School</li>
-              <li>Ruston Junior High School</li>
-              <li>LP Early Childhood Center</li>
-              <li>Simsboro School</li>
-              <li>Lincoln Parish STEM Center</li>
+              <li>Oak Grove High School (Oak Grove)</li>
+              <li>Oak Grove Elementary School (Oak Grove)</li>
+              <li>Forest High School (Forest)</li>
             </ul>
           </div>
 
@@ -401,14 +390,13 @@ const Landing = () => {
               <a href="#" className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"><svg xmlns='http://www.w3.org/2000/svg' className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path d='M7.5 17.5l9-9M8 7h8v8'/></svg>Google Play</a>
             </div>
             <div className="flex gap-4 mt-2">
-              <a href="#" aria-label="Facebook" className="text-blue-700 hover:text-blue-900"><svg xmlns='http://www.w3.org/2000/svg' className='w-7 h-7' fill='currentColor' viewBox='0 0 24 24'><path d='M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0'/></svg></a>
-              <a href="#" aria-label="Twitter" className="text-blue-700 hover:text-blue-900"><svg xmlns='http://www.w3.org/2000/svg' className='w-7 h-7' fill='currentColor' viewBox='0 0 24 24'><path d='M24 4.557a9.83 9.83 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724c-.951.564-2.005.974-3.127 1.195a4.916 4.916 0 0 0-8.38 4.482C7.691 8.095 4.066 6.13 1.64 3.161c-.542.93-.856 2.011-.857 3.17 0 2.188 1.115 4.117 2.823 5.254a4.904 4.904 0 0 1-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.936 4.936 0 0 1-2.224.084c.627 1.956 2.444 3.377 4.6 3.417A9.867 9.867 0 0 1 0 21.543a13.94 13.94 0 0 0 7.548 2.209c9.057 0 14.009-7.496 14.009-13.986 0-.213-.005-.425-.014-.636A9.936 9.936 0 0 0 24 4.557z'/></svg></a>
-              <a href="#" aria-label="Instagram" className="text-blue-700 hover:text-blue-900"><svg xmlns='http://www.w3.org/2000/svg' className='w-7 h-7' fill='currentColor' viewBox='0 0 24 24'><path d='M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.974.974 1.246 2.241 1.308 3.608.058 1.266.069 1.646.069 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.974-2.241 1.246-3.608 1.308-1.266.058-1.646.069-4.85.069s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.974-.974-1.246-2.241-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.974-.974 2.241-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.771.131 4.659.425 3.678 1.406c-.98.98-1.274 2.092-1.334 3.374C2.013 8.332 2 8.741 2 12c0 3.259.013 3.668.072 4.948.06 1.282.354 2.394 1.334 3.374.98.98 2.092 1.274 3.374 1.334C8.332 23.987 8.741 24 12 24s3.668-.013 4.948-.072c1.282-.06 2.394-.354 3.374-1.334.98-.98 1.274-2.092 1.334-3.374.059-1.28.072-1.689.072-4.948 0-3.259-.013-3.668-.072-4.948-.06-1.282-.354-2.394-1.334-3.374-.98-.98-2.092-1.274-3.374-1.334C15.668.013 15.259 0 12 0z'/><circle cx='12' cy='12' r='3.5'/><circle cx='18.406' cy='5.594' r='1.44'/></svg></a>
+              <a href="https://www.facebook.com/wcpsb/" aria-label="Facebook" className="text-blue-700 hover:text-blue-900"><svg xmlns='http://www.w3.org/2000/svg' className='w-7 h-7' fill='currentColor' viewBox='0 0 24 24'><path d='M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0'/></svg></a>
+              <a href="https://www.linkedin.com/company/wcpsb/" aria-label="LinkedIn" className="text-blue-700 hover:text-blue-900"><svg xmlns='http://www.w3.org/2000/svg' className='w-7 h-7' fill='currentColor' viewBox='0 0 24 24'><path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'/></svg></a>
             </div>
           </div>
         </div>
         <div className="border-t border-gray-300 text-center text-xs text-gray-500 py-4 bg-gray-100">
-                      Copyright © 2025 West Carroll Parish School Board. All rights reserved.<br />Powered By Apptegy
+          Copyright © 2025 West Carroll Parish School Board. All rights reserved.<br />Powered By Apptegy
         </div>
       </footer>
 
