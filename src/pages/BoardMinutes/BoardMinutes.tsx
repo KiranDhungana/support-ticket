@@ -44,7 +44,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Regular Meeting',
     time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'upcoming',
     minutes: {
       available: false,
@@ -67,7 +67,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Regular Meeting',
     time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -90,7 +90,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Special Session',
     time: '4:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -136,7 +136,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Regular Meeting',
     time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -159,7 +159,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Regular Meeting',
     time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -182,7 +182,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Special Session',
     time: '5:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -205,7 +205,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Regular Meeting',
     time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -228,7 +228,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Regular Meeting',
     time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -251,7 +251,7 @@ const boardMeetingsData = [
     year: 2025,
     type: 'Regular Meeting',
     time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
+    location: 'West Carroll Parish School Board Office',
     status: 'completed',
     minutes: {
       available: true,
@@ -338,14 +338,14 @@ const BoardMinutes = () => {
         <div className="mb-8">
           <Group gap="md" align="center" className="mb-4">
             <div className="flex items-center gap-3">
-              <img src="/public/Logo.png" alt="Logo" className="w-12 h-12" />
-              <Title order={1} className="text-4xl font-bold text-red-600">
+              <img src="/src/assets/logo.png" alt="Logo" className="w-12 h-12" />
+                              <Title order={1} className="text-4xl font-bold wcpsb-gold">
                 Board Minutes & Agenda
               </Title>
             </div>
           </Group>
           <Text className="text-gray-600 text-lg mb-4">
-            Access meeting agendas, minutes, and related documents from Lincoln Parish School Board meetings.
+            Access meeting agendas, minutes, and related documents from West Carroll Parish School Board meetings.
           </Text>
           
           {/* Disclaimer Alert */}

@@ -15,7 +15,7 @@ const navLinks = [
 
 const quickLinks = [
   { label: 'PreK-12th Grade Registration', href: '#' },
-  { label: 'Moodle', href: '#' },
+  { label: 'Canvas', href: 'http://westcarroll.instructure.com/' },
   { label: 'SchoolCash Online', href: '#' },
 ];
 
@@ -35,12 +35,12 @@ const HomeNavigation = () => {
   return (
     <>
       {/* Top Blue Bar */}
-      <div className="bg-blue-900 text-white h-17 px-4 py-2 flex flex-col sm:flex-row items-center justify-between">
+      <div className="bg-wcpsb-blue text-white h-17 px-4 py-2 flex flex-col sm:flex-row items-center justify-between">
         <div 
           className="flex items-center gap-2 py-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
           onClick={() => navigate('/')}
         >
-          <img src="/public/Logo.png" alt="Logo" width={36} height={36}  />
+          <img src="/src/assets/logo.png" alt="Logo" width={36} height={36}  />
           <div>
             <Text fw={700} size="md">West Carroll Parish School Board</Text>
             <Text size="xs">A Quality Education for a Quality Life</Text>
@@ -48,7 +48,10 @@ const HomeNavigation = () => {
         </div>
         <Group gap="md" visibleFrom="sm">
           {quickLinks.map((link) => (
-            <a key={link.label} href={link.href} className="text-white hover:underline text-sm font-medium">{link.label}</a>
+            <a key={link.label} href={link.href} className="text-white hover:underline text-sm font-medium flex items-center gap-2">
+              {link.label === 'Canvas' && <img src="/src/assets/logo.png" alt="Canvas" width={20} height={20} />}
+              {link.label}
+            </a>
           ))}
         </Group>
       </div>
@@ -121,24 +124,11 @@ const HomeNavigation = () => {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Label>Elementary Schools</Menu.Label>
-                <Menu.Item>Hillcrest Elementary</Menu.Item>
-                <Menu.Item>Oak Grove Elementary</Menu.Item>
-                <Menu.Item>Lincoln Elementary</Menu.Item>
-                <Menu.Item>Ruston Elementary</Menu.Item>
-                <Menu.Item>Simsboro Elementary</Menu.Item>
-                <Menu.Divider />
-                <Menu.Label>Middle Schools</Menu.Label>
-                <Menu.Item>Ruston Junior High</Menu.Item>
-                <Menu.Item>Lincoln Junior High</Menu.Item>
+                <Menu.Item>Oak Grove Elementary School</Menu.Item>
                 <Menu.Divider />
                 <Menu.Label>High Schools</Menu.Label>
-                <Menu.Item>Ruston High School</Menu.Item>
-                <Menu.Item>Lincoln High School</Menu.Item>
-                <Menu.Item>Simsboro High School</Menu.Item>
-                <Menu.Divider />
-                <Menu.Label>Special Programs</Menu.Label>
-                <Menu.Item>Early Childhood Center</Menu.Item>
-                <Menu.Item>Alternative Learning Center</Menu.Item>
+                <Menu.Item>Oak Grove High School</Menu.Item>
+                <Menu.Item>Forest High School</Menu.Item>
               </Menu.Dropdown>
             </Menu>
             <Menu withinPortal openDelay={100} closeDelay={300}>
@@ -351,24 +341,11 @@ const HomeNavigation = () => {
                           <div className="bg-gray-50 border-b border-gray-200">
                             <div className="px-6 py-2 space-y-2">
                               <div className="text-xs font-semibold text-gray-500 px-3 py-1">Elementary Schools</div>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Hillcrest Elementary</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Oak Grove Elementary</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Lincoln Elementary</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Ruston Elementary</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Simsboro Elementary</button>
-                              
-                              <div className="text-xs font-semibold text-gray-500 px-3 py-1 mt-3">Middle Schools</div>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Ruston Junior High</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Lincoln Junior High</button>
+                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Oak Grove Elementary School</button>
                               
                               <div className="text-xs font-semibold text-gray-500 px-3 py-1 mt-3">High Schools</div>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Ruston High School</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Lincoln High School</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Simsboro High School</button>
-                              
-                              <div className="text-xs font-semibold text-gray-500 px-3 py-1 mt-3">Special Programs</div>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Early Childhood Center</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Alternative Learning Center</button>
+                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Oak Grove High School</button>
+                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Forest High School</button>
                             </div>
                           </div>
                         )}

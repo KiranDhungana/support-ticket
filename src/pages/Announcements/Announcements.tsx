@@ -133,7 +133,7 @@ const Announcements = () => {
                   <div className="flex-1 min-w-0">
                     {/* Source */}
                     <Text size="sm" className="text-gray-500 mb-1">
-                      Lincoln Parish School Board
+                      West Carroll Parish School Board
                     </Text>
                     
                     {/* Title */}

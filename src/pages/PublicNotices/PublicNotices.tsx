@@ -13,11 +13,11 @@ type Notice = PublicNotice;
 const sampleNotices: Notice[] = [
   {
     id: '1',
-    title: '2024-2025 Lincoln Parish School Wellness Policy',
+            title: '2024-2025 West Carroll Parish School Wellness Policy',
     description: 'Comprehensive wellness policy for the 2024-2025 academic year covering nutrition, physical activity, and health education.',
     category: 'Policy',
     date: '2024-08-15',
-    author: 'Lincoln Parish School Board',
+            author: 'West Carroll Parish School Board',
     pdfUrl: '/sample-pdf.pdf',
     fileSize: '2.3 MB'
   },
