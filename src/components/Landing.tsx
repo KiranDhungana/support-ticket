@@ -7,6 +7,10 @@ import { getActiveAnnouncements } from '../services/announcementService';
 import type { Announcement } from '../services/announcementService';
 import { getPublishedNews } from '../services/newsService';
 import type { News } from '../services/newsService';
+import logoImage from '../assets/logo.png';
+
+// Debug log to ensure logo is imported correctly
+console.log('Logo image path:', logoImage);
 
 const heroImages = [
   '/public/Slider1.png',
@@ -348,7 +352,20 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {/* Contact/Logo */}
           <div>
-            <img src="/src/assets/logo.png" alt="West Carroll Parish School Board Logo" className="w-20 h-20 mb-3" />
+            <img 
+              src={logoImage} 
+              alt="West Carroll Parish School Board Logo" 
+              className="w-20 h-20 mb-3" 
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                // Fallback to text if image fails
+                e.currentTarget.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.className = 'w-20 h-20 mb-3 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
+                fallback.textContent = 'WCPSB';
+                e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
+              }}
+            />
             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">Find Us</h3>
             <div className="text-gray-700 text-sm flex flex-col gap-1">
               <span>West Carroll Parish School Board</span>

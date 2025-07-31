@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Group, Text, Menu, Button, UnstyledButton } from '@mantine/core';
 import { IconChevronDown, IconMenu2, IconWorld, IconSchool } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import logoImage from '../assets/logo.png';
 
 const navLinks = [
   { label: 'STUDENTS', dropdown: true },
@@ -40,7 +41,20 @@ const HomeNavigation = () => {
           className="flex items-center gap-2 py-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
           onClick={() => navigate('/')}
         >
-          <img src="/src/assets/logo.png" alt="Logo" width={36} height={36}  />
+          <img 
+            src={logoImage} 
+            alt="Logo" 
+            width={36} 
+            height={36}  
+            onError={(e) => {
+              console.error('Logo failed to load:', e);
+              e.currentTarget.style.display = 'none';
+              const fallback = document.createElement('div');
+              fallback.className = 'w-9 h-9 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
+              fallback.textContent = 'WCPSB';
+              e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
+            }}
+          />
           <div>
             <Text fw={700} size="md">West Carroll Parish School Board</Text>
             <Text size="xs">A Quality Education for a Quality Life</Text>
@@ -49,7 +63,20 @@ const HomeNavigation = () => {
         <Group gap="md" visibleFrom="sm">
           {quickLinks.map((link) => (
             <a key={link.label} href={link.href} className="text-white hover:underline text-sm font-medium flex items-center gap-2">
-              {link.label === 'Canvas' && <img src="/src/assets/logo.png" alt="Canvas" width={20} height={20} />}
+              {link.label === 'Canvas' && <img 
+                src={logoImage} 
+                alt="Canvas" 
+                width={20} 
+                height={20} 
+                onError={(e) => {
+                  console.error('Canvas logo failed to load:', e);
+                  e.currentTarget.style.display = 'none';
+                  const fallback = document.createElement('div');
+                  fallback.className = 'w-5 h-5 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
+                  fallback.textContent = 'C';
+                  e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
+                }}
+              />}
               {link.label}
             </a>
           ))}
