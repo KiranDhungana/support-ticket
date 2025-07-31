@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Group, Text, Menu, Button, UnstyledButton } from '@mantine/core';
 import { IconChevronDown, IconMenu2, IconWorld, IconSchool } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import logoImage from '../assets/logo.png';
 
 const navLinks = [
   { label: 'STUDENTS', dropdown: true },
@@ -42,7 +41,7 @@ const HomeNavigation = () => {
           onClick={() => navigate('/')}
         >
           <img 
-            src={logoImage} 
+            src="/Logo.png" 
             alt="Logo" 
             width={36} 
             height={36}  
@@ -64,7 +63,7 @@ const HomeNavigation = () => {
           {quickLinks.map((link) => (
             <a key={link.label} href={link.href} className="text-white hover:underline text-sm font-medium flex items-center gap-2">
               {link.label === 'Canvas' && <img 
-                src={logoImage} 
+                src="/Logo.png" 
                 alt="Canvas" 
                 width={20} 
                 height={20} 

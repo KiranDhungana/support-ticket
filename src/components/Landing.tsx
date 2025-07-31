@@ -7,10 +7,6 @@ import { getActiveAnnouncements } from '../services/announcementService';
 import type { Announcement } from '../services/announcementService';
 import { getPublishedNews } from '../services/newsService';
 import type { News } from '../services/newsService';
-import logoImage from '../assets/logo.png';
-
-// Debug log to ensure logo is imported correctly
-console.log('Logo image path:', logoImage);
 
 const heroImages = [
   '/public/Slider1.png',
@@ -352,20 +348,20 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {/* Contact/Logo */}
           <div>
-            <img 
-              src={logoImage} 
-              alt="West Carroll Parish School Board Logo" 
-              className="w-20 h-20 mb-3" 
-              onError={(e) => {
-                console.error('Logo failed to load:', e);
-                // Fallback to text if image fails
-                e.currentTarget.style.display = 'none';
-                const fallback = document.createElement('div');
-                fallback.className = 'w-20 h-20 mb-3 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
-                fallback.textContent = 'WCPSB';
-                e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
-              }}
-            />
+                          <img 
+                src="/Logo.png" 
+                alt="West Carroll Parish School Board Logo" 
+                className="w-20 h-20 mb-3" 
+                onError={(e) => {
+                  console.error('Logo failed to load:', e);
+                  // Fallback to text if image fails
+                  e.currentTarget.style.display = 'none';
+                  const fallback = document.createElement('div');
+                  fallback.className = 'w-20 h-20 mb-3 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
+                  fallback.textContent = 'WCPSB';
+                  e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
+                }}
+              />
             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">Find Us</h3>
             <div className="text-gray-700 text-sm flex flex-col gap-1">
               <span>West Carroll Parish School Board</span>
@@ -402,10 +398,6 @@ const Landing = () => {
           {/* Stay Connected */}
           <div>
             <h3 className="font-bold text-lg mb-2">Stay Connected</h3>
-            <div className="flex flex-col gap-3 mb-4">
-              <a href="#" className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"><svg xmlns='http://www.w3.org/2000/svg' className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path d='M17 6.1V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v1.1'/><rect width='18' height='14' x='3' y='6.1' rx='2'/><path d='M8 10h.01M16 10h.01'/></svg>App Store</a>
-              <a href="#" className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"><svg xmlns='http://www.w3.org/2000/svg' className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path d='M7.5 17.5l9-9M8 7h8v8'/></svg>Google Play</a>
-            </div>
             <div className="flex gap-4 mt-2">
               <a href="https://www.facebook.com/wcpsb/" aria-label="Facebook" className="text-blue-700 hover:text-blue-900"><svg xmlns='http://www.w3.org/2000/svg' className='w-7 h-7' fill='currentColor' viewBox='0 0 24 24'><path d='M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0'/></svg></a>
               <a href="https://www.linkedin.com/company/wcpsb/" aria-label="LinkedIn" className="text-blue-700 hover:text-blue-900"><svg xmlns='http://www.w3.org/2000/svg' className='w-7 h-7' fill='currentColor' viewBox='0 0 24 24'><path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'/></svg></a>
