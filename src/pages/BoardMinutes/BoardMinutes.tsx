@@ -32,7 +32,6 @@ import {
   IconInfoCircle
 } from '@tabler/icons-react';
 import HomeNavigation from '../../components/HomeNavigation';
-import logoImage from '../../assets/logo.png';
 
 // Sample board meeting data
 const boardMeetingsData = [
@@ -340,7 +339,7 @@ const BoardMinutes = () => {
           <Group gap="md" align="center" className="mb-4">
             <div className="flex items-center gap-3">
               <img 
-                src={logoImage} 
+                src="/Logo.png" 
                 alt="Logo" 
                 className="w-12 h-12" 
                 onError={(e) => {

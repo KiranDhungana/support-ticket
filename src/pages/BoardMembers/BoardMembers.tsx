@@ -28,7 +28,6 @@ import { notifications } from '@mantine/notifications';
 import HomeNavigation from '../../components/HomeNavigation';
 import { boardMemberService } from '../../services/boardMemberService';
 import type { BoardMember } from '../../services/boardMemberService';
-import logoImage from '../../assets/logo.png';
 
 const BoardMembers = () => {
   const [boardMembers, setBoardMembers] = useState<BoardMember[]>([]);
@@ -102,7 +101,7 @@ const BoardMembers = () => {
           <Group gap="md" align="center" className="mb-4">
             <div className="flex items-center gap-3">
               <img 
-                src={logoImage} 
+                src="/Logo.png" 
                 alt="Logo" 
                 className="w-12 h-12" 
                 onError={(e) => {
