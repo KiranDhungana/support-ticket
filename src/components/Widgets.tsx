@@ -1,5 +1,42 @@
 
+import { useState, useEffect } from 'react';
+import calendarService from '../services/calendarService';
+import type { CalendarEvent } from '../services/calendarService';
+
 const Widgets = () => {
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const eventsData = await calendarService.getEvents(5); // Get 5 upcoming events
+      setEvents(eventsData);
+    } catch (err) {
+      console.error('Error fetching events:', err);
+      setError('Failed to load events');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatEventDate = (event: CalendarEvent) => {
+    const startDate = event.start.dateTime || event.start.date;
+    if (!startDate) return { month: 'N/A', day: 'N/A' };
+    
+    const date = new Date(startDate);
+    return {
+      month: date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+      day: date.getDate().toString()
+    };
+  };
+
   return (
      <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6 p-6 bg-gray-100 px-20">
       {/* Upcoming Events */}
@@ -8,61 +45,42 @@ const Widgets = () => {
           Upcoming Events
         </h2>
         <div className="overflow-y-auto px-6 mt-4">
-          {/* Event Item */}
-          <div className="flex items-start mb-6">
-            <div className="flex-shrink-0 bg-amber-200 text-[#1d3c6a] px-4 py-2 text-center">
-              <div className="uppercase">Jun</div>
-              <div className="text-2xl font-bold">23</div>
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-gray-500">Loading events...</div>
             </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-semibold text-[#1d3c6a]">Graduation Practice</h3>
-              <p className="text-sm text-gray-700">Oak Grove High School</p>
-              <p className="text-sm text-gray-600">2:00 AM - 7:00 AM</p>
+          ) : error ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-red-500">{error}</div>
             </div>
-          </div>
-          {/* Repeat items as needed */}
-          <div className="flex items-start mb-6">
-            <div className="flex-shrink-0 bg-amber-200 text-[#1d3c6a] px-4 py-2 text-center">
-              <div className="uppercase">Jun</div>
-              <div className="text-2xl font-bold">23</div>
+          ) : events.length === 0 ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-gray-500">No upcoming events</div>
             </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-semibold text-[#1d3c6a]">Graduation Practice</h3>
-              <p className="text-sm text-gray-700">Oak Grove High School</p>
-              <p className="text-sm text-gray-600">8:00 PM - 1:00 AM</p>
-            </div>
-          </div>
-          <div className="flex items-start mb-6">
-            <div className="flex-shrink-0 bg-amber-200 text-[#1d3c6a] px-4 py-2 text-center">
-              <div className="uppercase">Jun</div>
-              <div className="text-2xl font-bold">24</div>
-            </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-semibold text-[#1d3c6a]">Senior Walk the Hall</h3>
-              <p className="text-sm text-gray-700">Oak Grove High School</p>
-            </div>
-          </div>
-
-           <div className="flex items-start mb-6">
-            <div className="flex-shrink-0 bg-amber-200 text-[#1d3c6a] px-4 py-2 text-center">
-              <div className="uppercase">Jun</div>
-              <div className="text-2xl font-bold">24</div>
-            </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-semibold text-[#1d3c6a]">Senior Walk the Hall</h3>
-              <p className="text-sm text-gray-700">Oak Grove High School</p>
-            </div>
-          </div>
-          <div className="flex items-start mb-6">
-            <div className="flex-shrink-0 bg-amber-200 text-[#1d3c6a] px-4 py-2 text-center">
-              <div className="uppercase">Jun</div>
-              <div className="text-2xl font-bold">24</div>
-            </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-semibold text-[#1d3c6a]">Senior Walk the Hall</h3>
-              <p className="text-sm text-gray-700">Oak Grove High School</p>
-            </div>
-          </div>
+          ) : (
+            events.map((event) => {
+              const dateInfo = formatEventDate(event);
+              const timeInfo = calendarService.formatEventTime(event);
+              
+              return (
+                <div key={event.id} className="flex items-start mb-6">
+                  <div className="flex-shrink-0 bg-amber-200 text-[#1d3c6a] px-4 py-2 text-center">
+                    <div className="uppercase">{dateInfo.month}</div>
+                    <div className="text-2xl font-bold">{dateInfo.day}</div>
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-lg font-semibold text-[#1d3c6a]">{event.summary}</h3>
+                    {event.location && (
+                      <p className="text-sm text-gray-700">{event.location}</p>
+                    )}
+                    {timeInfo && (
+                      <p className="text-sm text-gray-600">{timeInfo}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
         <button className="bg-[#1d3c6a] text-white py-2 px-4 rounded-b-lg hover:bg-opacity-90">
           See all events

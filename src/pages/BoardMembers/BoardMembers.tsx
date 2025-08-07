@@ -100,19 +100,7 @@ const BoardMembers = () => {
         <div className="mb-8">
           <Group gap="md" align="center" className="mb-4">
             <div className="flex items-center gap-3">
-              <img 
-                src="/Logo.png" 
-                alt="Logo" 
-                className="w-12 h-12" 
-                onError={(e) => {
-                  console.error('Logo failed to load:', e);
-                  e.currentTarget.style.display = 'none';
-                  const fallback = document.createElement('div');
-                  fallback.className = 'w-12 h-12 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
-                  fallback.textContent = 'WCPSB';
-                  e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
-                }}
-              />
+              <img src="/logo.png" alt="Logo" className="h-12 w-auto" />
                               <Title order={1} className="text-4xl font-bold wcpsb-gold">
                 Board Members
               </Title>

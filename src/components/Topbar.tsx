@@ -6,11 +6,7 @@ const Topbar = () => {
         <div className="flex flex-col items-center sm:flex-row sm:justify-between h-26 sm:h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <img
-              src="/Logo.png"
-              alt="West Carroll Parish School Board Logo"
-              className="h-24 w-auto"
-            />
+            <img src="/logo.png" alt="Logo" width={36} height={36} />
           </div>
 
           {/* Title */}
