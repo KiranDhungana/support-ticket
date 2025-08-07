@@ -1,17 +1,24 @@
-import { Image, Text, Button } from '@mantine/core';
-import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCurrencyDollar, IconCalendarEvent, IconPencil, IconBook2, IconUser, IconCalendar } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
+import { Container, Title, Text, Button, Group, Card, Badge, Modal, Image } from '@mantine/core';
+import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCalendarEvent, IconPencil, IconBook2, IconClock, IconMapPin, IconUser, IconCalendar } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import HomeNavigation from './HomeNavigation';
 import { getActiveAnnouncements } from '../services/announcementService';
 import type { Announcement } from '../services/announcementService';
 import { getPublishedNews } from '../services/newsService';
 import type { News } from '../services/newsService';
+import calendarService, { type CalendarEvent } from '../services/calendarService';
+import { IMAGE_PATHS } from '../utils/imageUtils';
 
-const heroImages = [
-  '/public/Slider1.png',
-  '/public/Slider2.png',
-  '/public/Slider3.png',
+const images = [
+  IMAGE_PATHS.SLIDER_1,
+  IMAGE_PATHS.SLIDER_2,
+  IMAGE_PATHS.SLIDER_3,
+  IMAGE_PATHS.SLIDER_4,
+  IMAGE_PATHS.SLIDER_5,
+  IMAGE_PATHS.SLIDER_6,
+  IMAGE_PATHS.SLIDER_7,
+  IMAGE_PATHS.SLIDER_8,
 ];
 
 const Landing = () => {
@@ -19,15 +26,18 @@ const Landing = () => {
   const [current, setCurrent] = useState(0);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [news, setNews] = useState<News[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [eventsLoading, setEventsLoading] = useState(true);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const next = () => setCurrent((c) => (c + 1) % heroImages.length);
-  const prev = () => setCurrent((c) => (c - 1 + heroImages.length) % heroImages.length);
+  const next = () => setCurrent((c) => (c + 1) % images.length);
+  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length);
 
   useEffect(() => {
     fetchAnnouncements();
+    fetchEvents();
   }, []);
 
   const fetchAnnouncements = async () => {
@@ -43,6 +53,19 @@ const Landing = () => {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchEvents = async () => {
+    try {
+      setEventsLoading(true);
+      const eventsData = await calendarService.getEvents(4); // Get 4 upcoming events
+      setEvents(eventsData);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      setEvents([]);
+    } finally {
+      setEventsLoading(false);
     }
   };
 
@@ -75,6 +98,53 @@ const Landing = () => {
     }
   };
 
+  const formatEventDate = (event: CalendarEvent) => {
+    const startDate = event.start.dateTime || event.start.date;
+    if (!startDate) return { month: 'N/A', day: 'N/A' };
+    
+    const date = new Date(startDate);
+    const month = date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    const day = date.getDate().toString();
+    
+    // Check if it's a multi-day event
+    if (event.end.dateTime || event.end.date) {
+      const endDateStr = event.end.dateTime || event.end.date;
+      if (endDateStr) {
+        const endDate = new Date(endDateStr);
+        if (endDate.getDate() !== date.getDate() || endDate.getMonth() !== date.getMonth()) {
+          const endDay = endDate.getDate().toString();
+          return { month, day: `${day} — ${endDay}` };
+        }
+      }
+    }
+    
+    return { month, day };
+  };
+
+  const formatEventTime = (event: CalendarEvent) => {
+    if (!event.start.dateTime) return 'ALL DAY';
+    
+    const startTime = new Date(event.start.dateTime);
+    const endTime = event.end.dateTime ? new Date(event.end.dateTime) : null;
+    
+    const startTimeStr = startTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    
+    if (endTime) {
+      const endTimeStr = endTime.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+      return `${startTimeStr} — ${endTimeStr}`;
+    }
+    
+    return startTimeStr;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <HomeNavigation />
@@ -82,7 +152,7 @@ const Landing = () => {
       {/* Hero Section / Slider */}
       <div className="relative w-full h-[260px] sm:h-[340px] md:h-[420px] flex items-end justify-center bg-gray-200 overflow-hidden">
         <Image
-          src={heroImages[current]}
+          src={images[current]}
           alt="School Hero"
           className="object-cover w-full h-full absolute top-0 left-0 z-0"
           style={{ filter: 'brightness(0.95)' }}
@@ -91,7 +161,7 @@ const Landing = () => {
           <Text className="text-white text-4xl sm:text-5xl font-bold drop-shadow-lg mb-2">West Carroll Parish School Board</Text>
           <div className="flex items-center gap-4 mt-4">
             <div className="flex gap-2">
-              {heroImages.map((_, idx) => (
+              {images.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrent(idx)}
@@ -135,11 +205,6 @@ const Landing = () => {
             <IconChalkboard size={48} stroke={1.5} className="text-white mb-2" />
             <span className="text-white font-bold text-lg text-center">EMPLOYMENT</span>
           </div>
-          {/* Widget 2 */}
-          <div className="flex-1 flex flex-col items-center justify-center px-4">
-            <IconCurrencyDollar size={48} stroke={1.5} className="text-white mb-2" />
-            <span className="text-white font-bold text-lg text-center">SCHOOL CASH ONLINE</span>
-          </div>
           {/* Widget 3 */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <IconCalendarEvent size={48} stroke={1.5} className="text-white mb-2" />
@@ -166,30 +231,42 @@ const Landing = () => {
             <a href="#" className="text-white underline text-lg">See All Events</a>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Event 1 */}
-            <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-800 font-bold text-xl mb-2">Jul 8</span>
-              <span className="text-gray-700 text-sm mb-1">6:00 PM — 7:30 PM</span>
-              <span className="text-gray-900 font-medium">School Board Meeting</span>
-            </div>
-            {/* Event 2 */}
-            <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-800 font-bold text-xl mb-2">Aug 11 — Aug 13</span>
-              <span className="text-gray-700 text-sm mb-1">ALL DAY</span>
-              <span className="text-gray-900 font-medium">Staff Development (No Students)</span>
-            </div>
-            {/* Event 3 */}
-            <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-800 font-bold text-xl mb-2">Aug 14</span>
-              <span className="text-gray-700 text-sm mb-1">ALL DAY</span>
-              <span className="text-gray-900 font-medium">First Day for 1st-12th Grade Students (Full Day)</span>
-            </div>
-            {/* Event 4 */}
-            <div className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
-              <span className="text-blue-800 font-bold text-xl mb-2">Aug 14 — Aug 19</span>
-              <span className="text-gray-700 text-sm mb-1">ALL DAY</span>
-              <span className="text-gray-900 font-medium">Pre-K and Kindergarten Screeening</span>
-            </div>
+            {eventsLoading ? (
+              // Loading state
+              Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col animate-pulse">
+                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-1"></div>
+                  <div className="h-4 bg-gray-200 rounded flex-1"></div>
+                </div>
+              ))
+            ) : events.length === 0 ? (
+              // No events state
+              Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col items-center justify-center">
+                  <span className="text-gray-500 text-center">No upcoming events</span>
+                </div>
+              ))
+            ) : (
+              // Events display
+              events.map((event) => {
+                const dateInfo = formatEventDate(event);
+                const timeInfo = formatEventTime(event);
+                
+                return (
+                  <div key={event.id} className="bg-white rounded shadow p-6 min-h-[160px] flex flex-col">
+                    <span className="text-blue-800 font-bold text-xl mb-2">
+                      {dateInfo.month} {dateInfo.day}
+                    </span>
+                    <span className="text-gray-700 text-sm mb-1">{timeInfo}</span>
+                    <span className="text-gray-900 font-medium">{event.summary}</span>
+                    {event.location && (
+                      <span className="text-gray-600 text-xs mt-1">{event.location}</span>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>
@@ -224,10 +301,10 @@ const Landing = () => {
                   {news.length > 0 && (
                     <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                       <div className="flex flex-col lg:flex-row gap-3">
-                        <img 
-                          src={news[0].imageUrl || '/public/Slider1.png'} 
-                          alt={news[0].title} 
-                          className="w-full lg:w-60 h-32 object-cover rounded-lg" 
+                        <Image
+                          src={news[0].imageUrl || IMAGE_PATHS.SLIDER_1}
+                          alt={news[0].title}
+                          className="object-cover w-full lg:w-60 h-32 rounded-lg"
                         />
                         <div className="flex-1">
                           <div className="text-xs text-blue-700 font-semibold mb-1">FEATURED NEWS</div>
@@ -277,10 +354,10 @@ const Landing = () => {
                           </button>
                         </div>
                         <div className="sm:w-32 flex-shrink-0">
-                          <img 
-                            src={newsItem.imageUrl || '/public/Slider1.png'} 
-                            alt={newsItem.title} 
-                            className="w-full h-full object-cover" 
+                          <Image
+                            src={newsItem.imageUrl || IMAGE_PATHS.SLIDER_1}
+                            alt={newsItem.title}
+                            className="object-cover w-full h-full"
                           />
                         </div>
                       </div>
@@ -385,14 +462,10 @@ const Landing = () => {
           {/* Child/Family Services */}
           <div>
             <h3 className="font-bold text-lg mb-2">LOUISIANA DEPARTMENT OF CHILDREN AND FAMILY SERVICES</h3>
-            <a href="#" className="text-blue-700 underline text-sm mb-2 block">Website Link</a>
+            <a href="https://dcfs.louisiana.gov/" target="_blank" rel="noopener noreferrer" className="text-blue-700 underline text-sm mb-2 block">Website Link</a>
             <h4 className="font-bold text-md mt-4 mb-1">REPORT CHILD ABUSE:</h4>
             <div className="text-gray-700 text-sm mb-2">Call 1-855-452-5437</div>
             <div className="text-gray-700 text-xs mb-2">Toll Free 24 hours a day, 365 days a year.</div>
-            <div className="flex flex-col gap-2 mt-2">
-              <img src="https://www.lla.la.gov/media/1/lla-hotline-graphic.png" alt="LLA Hotline" className="w-28 h-10 object-contain rounded" />
-              <img src="https://www.stopbullying.gov/sites/default/files/styles/scale_crop_300/public/2021-10/stop-bullying.png" alt="Stop Bullying" className="w-20 h-10 object-contain rounded" />
-            </div>
           </div>
 
           {/* Stay Connected */}

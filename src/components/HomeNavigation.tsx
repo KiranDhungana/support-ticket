@@ -1,22 +1,21 @@
 import { useState } from 'react';
 import { Group, Text, Menu, Button, UnstyledButton } from '@mantine/core';
-import { IconChevronDown, IconMenu2, IconWorld, IconSchool } from '@tabler/icons-react';
+import { IconChevronDown, IconMenu2, IconSchool } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import { IMAGE_PATHS, handleImageError } from '../utils/imageUtils';
 
 const navLinks = [
-  { label: 'STUDENTS', dropdown: true },
-  { label: 'PARENTS', dropdown: true },
+  { label: 'SUPERINTENDENT', dropdown: true },
+  { label: 'PARENTS & STUDENTS', dropdown: true },
   { label: 'EMPLOYEES' },
-  { label: 'LEADERSHIP', dropdown: true },
+  { label: 'POLICIES', dropdown: true },
   { label: 'PUBLIC NOTICES' },
-  { label: 'CALENDARS', dropdown: true },
-  { label: 'MORE', dropdown: true },
+  { label: 'CAREER' },
 ];
 
 const quickLinks = [
-  { label: 'PreK-12th Grade Registration', href: '#' },
+  { label: 'Help desk login', href: 'http://api.82.25.95.230.nip.io/login' },
   { label: 'Canvas', href: 'http://westcarroll.instructure.com/' },
-  { label: 'SchoolCash Online', href: '#' },
 ];
 
 const HomeNavigation = () => {
@@ -41,18 +40,11 @@ const HomeNavigation = () => {
           onClick={() => navigate('/')}
         >
           <img 
-            src="/Logo.png" 
+            src={IMAGE_PATHS.LOGO} 
             alt="Logo" 
             width={36} 
             height={36}  
-            onError={(e) => {
-              console.error('Logo failed to load:', e);
-              e.currentTarget.style.display = 'none';
-              const fallback = document.createElement('div');
-              fallback.className = 'w-9 h-9 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
-              fallback.textContent = 'WCPSB';
-              e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
-            }}
+            onError={handleImageError}
           />
           <div>
             <Text fw={700} size="md">West Carroll Parish School Board</Text>
@@ -61,20 +53,19 @@ const HomeNavigation = () => {
         </div>
         <Group gap="md" visibleFrom="sm">
           {quickLinks.map((link) => (
-            <a key={link.label} href={link.href} className="text-white hover:underline text-sm font-medium flex items-center gap-2">
+            <a 
+              key={link.label} 
+              href={link.href} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white hover:underline text-sm font-medium flex items-center gap-2"
+            >
               {link.label === 'Canvas' && <img 
-                src="/Logo.png" 
+                src={IMAGE_PATHS.LOGO} 
                 alt="Canvas" 
                 width={20} 
                 height={20} 
-                onError={(e) => {
-                  console.error('Canvas logo failed to load:', e);
-                  e.currentTarget.style.display = 'none';
-                  const fallback = document.createElement('div');
-                  fallback.className = 'w-5 h-5 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
-                  fallback.textContent = 'C';
-                  e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
-                }}
+                onError={handleImageError}
               />}
               {link.label}
             </a>
@@ -97,11 +88,35 @@ const HomeNavigation = () => {
                     </UnstyledButton>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    {item.label === 'LEADERSHIP' ? (
+                    {item.label === 'SUPERINTENDENT' ? (
                       <>
-                        <Menu.Item onClick={() => navigate('/board-members')}>Board Members</Menu.Item>
-                        <Menu.Item onClick={() => navigate('/board-minutes')}>Board Minutes & Agenda</Menu.Item>
-                        <Menu.Item onClick={() => navigate('/principals')}>Principals</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/wc-school-board')}>WC School Board</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/wc-school-board-minutes')}>WC School Board Minutes</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/vision-statement')}>Vision Statement</Menu.Item>
+                      </>
+                    ) : item.label === 'PARENTS & STUDENTS' ? (
+                      <>
+                        <Menu.Item onClick={() => navigate('/parents/registration')}>Parent Registration</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/parents/calendar')}>Parent Calendar</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/parents/resources')}>Parent Resources</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/parents/volunteer')}>Volunteer Opportunities</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/parents/communication')}>Communication</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/parents/policies')}>Policies & Procedures</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/students/registration')}>Student Registration</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/students/calendar')}>Student Calendar</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/students/resources')}>Student Resources</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/students/volunteer')}>Student Volunteer Opportunities</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/students/communication')}>Student Communication</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/students/policies')}>Student Policies & Procedures</Menu.Item>
+                      </>
+                    ) : item.label === 'POLICIES' ? (
+                      <>
+                        <Menu.Item onClick={() => navigate('/student-dress-code')}>Student Dress Code</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/charter-application')}>Charter Application</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/student-privacy')}>Student Privacy</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/vendor-agreement')}>Vendor Agreement</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/wc-parish-policy-manual')}>WC Parish Policy Manual</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/fight-fraud-waste-abuse')}>Fight Fraud, Waste, & Abuse</Menu.Item>
                       </>
                     ) : (
                       <>
@@ -118,6 +133,8 @@ const HomeNavigation = () => {
                   onClick={() => {
                     if (item.label === 'PUBLIC NOTICES') {
                       navigate('/public-notices');
+                    } else if (item.label === 'CAREER') {
+                      navigate('/jobs');
                     }
                   }}
                 >
@@ -157,17 +174,7 @@ const HomeNavigation = () => {
                 <Menu.Item>Forest High School</Menu.Item>
               </Menu.Dropdown>
             </Menu>
-            <Menu withinPortal openDelay={100} closeDelay={300}>
-              <Menu.Target>
-                <Button variant="subtle" leftSection={<IconWorld size={18} />} rightSection={<IconChevronDown size={16} />}>
-                  TRANSLATE
-                </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item>English</Menu.Item>
-                <Menu.Item>Spanish</Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+
           </Group>
         </div>
         
@@ -225,6 +232,8 @@ const HomeNavigation = () => {
                           onClick={() => {
                             if (item.label === 'PUBLIC NOTICES') {
                               navigate('/public-notices');
+                            } else if (item.label === 'CAREER') {
+                              navigate('/jobs');
                             } else if (item.dropdown) {
                               toggleExpanded(item.label);
                             }
@@ -246,49 +255,154 @@ const HomeNavigation = () => {
                         {item.dropdown && expandedItems.includes(item.label) && (
                           <div className="bg-gray-50 border-b border-gray-200">
                             <div className="px-6 py-2 space-y-2">
-                              {item.label === 'LEADERSHIP' ? (
+                              {item.label === 'SUPERINTENDENT' ? (
                                 <>
                                   <button 
-                                    onClick={() => navigate('/board-members')}
+                                    onClick={() => navigate('/wc-school-board')}
                                     className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
                                   >
-                                    Board Members
+                                    WC School Board
                                   </button>
                                   <button 
-                                    onClick={() => navigate('/board-minutes')}
+                                    onClick={() => navigate('/wc-school-board-minutes')}
                                     className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
                                   >
-                                    Board Minutes & Agenda
+                                    WC School Board Minutes
                                   </button>
                                   <button 
-                                    onClick={() => navigate('/principals')}
+                                    onClick={() => navigate('/vision-statement')}
                                     className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
                                   >
-                                    Principals
+                                    Vision Statement
+                                  </button>
+                                </>
+                              ) : item.label === 'PARENTS & STUDENTS' ? (
+                                <>
+                                  <button 
+                                    onClick={() => navigate('/parents/registration')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Parent Registration
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/parents/calendar')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Parent Calendar
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/parents/resources')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Parent Resources
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/parents/volunteer')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Volunteer Opportunities
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/parents/communication')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Communication
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/parents/policies')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Policies & Procedures
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/students/registration')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Registration
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/students/calendar')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Calendar
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/students/resources')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Resources
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/students/volunteer')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Volunteer Opportunities
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/students/communication')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Communication
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/students/policies')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Policies & Procedures
+                                  </button>
+                                </>
+                              ) : item.label === 'POLICIES' ? (
+                                <>
+                                  <button 
+                                    onClick={() => navigate('/student-dress-code')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Dress Code
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/charter-application')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Charter Application
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/student-privacy')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Student Privacy
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/vendor-agreement')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Vendor Agreement
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/wc-parish-policy-manual')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    WC Parish Policy Manual
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/fight-fraud-waste-abuse')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Fight Fraud, Waste, & Abuse
                                   </button>
                                 </>
                               ) : (
                                 <>
                                   <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">
-                                    {item.label === 'STUDENTS' && 'Student Portal'}
-                                    {item.label === 'PARENTS' && 'Parent Resources'}
-                                    {item.label === 'CALENDARS' && 'Academic Calendar'}
-                                    {item.label === 'MORE' && 'Additional Resources'}
-                                    {!['STUDENTS', 'PARENTS', 'CALENDARS', 'MORE'].includes(item.label) && 'Option 1'}
+                                    {item.label === 'CAREER' && 'Career Opportunities'}
+                                    {!['CAREER'].includes(item.label) && 'Option 1'}
                                   </button>
                                   <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">
-                                    {item.label === 'STUDENTS' && 'Student Handbook'}
-                                    {item.label === 'PARENTS' && 'Parent Handbook'}
-                                    {item.label === 'CALENDARS' && 'Events Calendar'}
-                                    {item.label === 'MORE' && 'Contact Information'}
-                                    {!['STUDENTS', 'PARENTS', 'CALENDARS', 'MORE'].includes(item.label) && 'Option 2'}
+                                    {item.label === 'CAREER' && 'Job Listings'}
+                                    {!['CAREER'].includes(item.label) && 'Option 2'}
                                   </button>
                                   <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">
-                                    {item.label === 'STUDENTS' && 'Student Activities'}
-                                    {item.label === 'PARENTS' && 'Volunteer Opportunities'}
-                                    {item.label === 'CALENDARS' && 'Holiday Schedule'}
-                                    {item.label === 'MORE' && 'About Us'}
-                                    {!['STUDENTS', 'PARENTS', 'CALENDARS', 'MORE'].includes(item.label) && 'Option 3'}
+                                    {item.label === 'CAREER' && 'Application Process'}
+                                    {!['CAREER'].includes(item.label) && 'Option 3'}
                                   </button>
                                 </>
                               )}
@@ -377,30 +491,7 @@ const HomeNavigation = () => {
                         )}
                       </div>
                       
-                      <div>
-                        <button 
-                          onClick={() => toggleExpanded('TRANSLATE')}
-                          className="flex items-center gap-3 px-3 py-4 hover:bg-gray-100 rounded w-full text-left"
-                        >
-                          <IconWorld size={18} className="text-gray-600" />
-                          <span className="font-medium text-gray-800">TRANSLATE</span>
-                          <IconChevronDown 
-                            size={16} 
-                            className={`text-gray-500 ml-auto transition-transform duration-200 ${
-                              expandedItems.includes('TRANSLATE') ? 'rotate-180' : ''
-                            }`} 
-                          />
-                        </button>
-                        {expandedItems.includes('TRANSLATE') && (
-                          <div className="bg-gray-50 border-b border-gray-200">
-                            <div className="px-6 py-2 space-y-2">
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">English</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">Spanish</button>
-                              <button className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm">French</button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+
                     </div>
                     
                     {/* Quick Links Section */}
