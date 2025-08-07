@@ -1,6 +1,6 @@
+import { Image, Text, Button } from '@mantine/core';
+import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCalendarEvent, IconPencil, IconBook2, IconUser, IconCalendar } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
-import { Container, Title, Text, Button, Group, Card, Badge, Modal, Image } from '@mantine/core';
-import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCalendarEvent, IconPencil, IconBook2, IconClock, IconMapPin, IconUser, IconCalendar } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import HomeNavigation from './HomeNavigation';
 import { getActiveAnnouncements } from '../services/announcementService';
@@ -8,17 +8,16 @@ import type { Announcement } from '../services/announcementService';
 import { getPublishedNews } from '../services/newsService';
 import type { News } from '../services/newsService';
 import calendarService, { type CalendarEvent } from '../services/calendarService';
-import { IMAGE_PATHS } from '../utils/imageUtils';
 
 const images = [
-  IMAGE_PATHS.SLIDER_1,
-  IMAGE_PATHS.SLIDER_2,
-  IMAGE_PATHS.SLIDER_3,
-  IMAGE_PATHS.SLIDER_4,
-  IMAGE_PATHS.SLIDER_5,
-  IMAGE_PATHS.SLIDER_6,
-  IMAGE_PATHS.SLIDER_7,
-  IMAGE_PATHS.SLIDER_8,
+  '/Slider1.png',
+  '/Slider2.png',
+  '/Slider3.png',
+  '/Slider4.png',
+  '/Slider5.png',
+  '/Slider6.png',
+  '/Slider7.png',
+  '/Slider8.png',
 ];
 
 const Landing = () => {
@@ -301,10 +300,10 @@ const Landing = () => {
                   {news.length > 0 && (
                     <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                       <div className="flex flex-col lg:flex-row gap-3">
-                        <Image
-                          src={news[0].imageUrl || IMAGE_PATHS.SLIDER_1}
-                          alt={news[0].title}
-                          className="object-cover w-full lg:w-60 h-32 rounded-lg"
+                        <img 
+                          src={news[0].imageUrl || '/public/Slider1.png'} 
+                          alt={news[0].title} 
+                          className="w-full lg:w-60 h-32 object-cover rounded-lg" 
                         />
                         <div className="flex-1">
                           <div className="text-xs text-blue-700 font-semibold mb-1">FEATURED NEWS</div>
@@ -354,10 +353,10 @@ const Landing = () => {
                           </button>
                         </div>
                         <div className="sm:w-32 flex-shrink-0">
-                          <Image
-                            src={newsItem.imageUrl || IMAGE_PATHS.SLIDER_1}
-                            alt={newsItem.title}
-                            className="object-cover w-full h-full"
+                          <img 
+                            src={newsItem.imageUrl || '/public/Slider1.png'} 
+                            alt={newsItem.title} 
+                            className="w-full h-full object-cover" 
                           />
                         </div>
                       </div>

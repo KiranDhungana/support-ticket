@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Group, Text, Menu, Button, UnstyledButton } from '@mantine/core';
 import { IconChevronDown, IconMenu2, IconSchool } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { IMAGE_PATHS, handleImageError } from '../utils/imageUtils';
 
 const navLinks = [
   { label: 'SUPERINTENDENT', dropdown: true },
@@ -14,7 +13,7 @@ const navLinks = [
 ];
 
 const quickLinks = [
-  { label: 'Help desk login', href: 'http://api.82.25.95.230.nip.io/login' },
+  { label: 'Help desk login', href: 'http://localhost:5173/login' },
   { label: 'Canvas', href: 'http://westcarroll.instructure.com/' },
 ];
 
@@ -40,11 +39,18 @@ const HomeNavigation = () => {
           onClick={() => navigate('/')}
         >
           <img 
-            src={IMAGE_PATHS.LOGO} 
+            src="/logo.png" 
             alt="Logo" 
             width={36} 
             height={36}  
-            onError={handleImageError}
+            onError={(e) => {
+              console.error('Logo failed to load:', e);
+              e.currentTarget.style.display = 'none';
+              const fallback = document.createElement('div');
+              fallback.className = 'w-9 h-9 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
+              fallback.textContent = 'WCPSB';
+              e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
+            }}
           />
           <div>
             <Text fw={700} size="md">West Carroll Parish School Board</Text>
@@ -61,11 +67,18 @@ const HomeNavigation = () => {
               className="text-white hover:underline text-sm font-medium flex items-center gap-2"
             >
               {link.label === 'Canvas' && <img 
-                src={IMAGE_PATHS.LOGO} 
+                src="/logo.png" 
                 alt="Canvas" 
                 width={20} 
                 height={20} 
-                onError={handleImageError}
+                onError={(e) => {
+                  console.error('Canvas logo failed to load:', e);
+                  e.currentTarget.style.display = 'none';
+                  const fallback = document.createElement('div');
+                  fallback.className = 'w-5 h-5 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
+                  fallback.textContent = 'C';
+                  e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
+                }}
               />}
               {link.label}
             </a>
