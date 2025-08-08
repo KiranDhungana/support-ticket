@@ -33,7 +33,7 @@ const HomeNavigation = () => {
 
   return (
     <>
-      {/* Top Blue Bar */}
+      
       <div className="bg-wcpsb-blue text-white h-17 px-4 py-2 flex flex-col sm:flex-row items-center justify-between">
         <div 
           className="flex items-center gap-2 py-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
