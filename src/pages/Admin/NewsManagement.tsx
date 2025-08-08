@@ -420,7 +420,7 @@ const NewsManagement: React.FC = () => {
                     <img 
                       src={formData.imageUrl} 
                       alt="Preview" 
-                      className="w-32 h-32 object-cover rounded-lg"
+                      className="w-32 h-32 object-contain bg-gray-100 rounded-lg"
                     />
                   </div>
                 )}

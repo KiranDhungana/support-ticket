@@ -31,13 +31,16 @@ import BoardMembers from "./pages/BoardMembers/BoardMembers";
 import BoardMinutes from "./pages/BoardMinutes/BoardMinutes";
 import Principals from "./pages/Principals/Principals";
 import BoardMemberManagement from "./pages/Admin/BoardMemberManagement";
+import Schools from "./pages/Schools/Schools";
+import Events from "./pages/Events/Events";
+import VendorAgreement from "./pages/VendorAgreement/VendorAgreement";
 
 function LayoutWithSidebar() {
   const location = useLocation();
   const { user } = useAuth();
 
   // Show home navigation for non-logged-in users and public pages
-  const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname.startsWith("/news/article/") || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals";
+  const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname.startsWith("/news/article/") || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals" || location.pathname === "/schools" || location.pathname === "/events" || location.pathname === "/vendor-agreement";
   const isLoggedIn = !!user;
   
   // Check if current route is an admin route
@@ -89,6 +92,9 @@ function LayoutWithSidebar() {
           <Route path="/board-members" element={<BoardMembers/>} />
           <Route path="/board-minutes" element={<BoardMinutes/>} />
           <Route path="/principals" element={<Principals/>} />
+          <Route path="/schools" element={<Schools/>} />
+          <Route path="/events" element={<Events/>} />
+          <Route path="/vendor-agreement" element={<VendorAgreement/>} />
           <Route
             path="/dashboard/admin"
             element={

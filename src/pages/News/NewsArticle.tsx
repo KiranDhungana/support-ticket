@@ -144,7 +144,7 @@ const NewsArticle = () => {
               <Image
                 src={article.imageUrl}
                 alt={article.title}
-                className="w-full h-96 object-cover"
+                className="w-full h-96 object-contain bg-gray-100"
               />
             </div>
           )}
