@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { 
   Card, 
   Text, 
@@ -6,7 +5,6 @@ import {
   Container, 
   Breadcrumbs,
   Anchor,
-  Stack,
   Tabs,
   TabsList,
   TabsTab
