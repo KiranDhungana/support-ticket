@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
 import { 
   Card, 
   Text, 
   Title, 
   Container, 
   Breadcrumbs,
-  Anchor,
-  Stack
+  Anchor
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import HomeNavigation from '../../components/HomeNavigation';

@@ -19,7 +19,6 @@ import {
 import { 
   IconSearch, 
   IconFilter, 
-  IconCalendar, 
   IconMapPin, 
   IconClock,
   IconArrowRight

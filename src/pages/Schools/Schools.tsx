@@ -15,7 +15,6 @@ import {
 } from '@mantine/core';
 import { 
   IconMail, 
-  IconSchool, 
   IconMapPin,
   IconPhone,
   IconArrowRight
@@ -136,8 +135,12 @@ const Schools = () => {
                       alt={school.name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling!.style.display = 'flex';
+                        const target = e.currentTarget as HTMLElement;
+                        target.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
                       }}
                     />
                     <div 
