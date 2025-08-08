@@ -10,6 +10,7 @@ const navLinks = [
   { label: 'POLICIES', dropdown: true },
   { label: 'PUBLIC NOTICES' },
   { label: 'CAREER' },
+  { label: 'SCHOOLS' },
 ];
 
 const quickLinks = [
@@ -40,17 +41,9 @@ const HomeNavigation = () => {
         >
           <img 
             src="/logo.png" 
-            alt="Logo" 
+            alt="West Carroll Parish School Board Logo" 
             width={36} 
             height={36}  
-            onError={(e) => {
-              console.error('Logo failed to load:', e);
-              e.currentTarget.style.display = 'none';
-              const fallback = document.createElement('div');
-              fallback.className = 'w-9 h-9 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
-              fallback.textContent = 'WCPSB';
-              e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
-            }}
           />
           <div>
             <Text fw={700} size="md">West Carroll Parish School Board</Text>
@@ -71,14 +64,6 @@ const HomeNavigation = () => {
                 alt="Canvas" 
                 width={20} 
                 height={20} 
-                onError={(e) => {
-                  console.error('Canvas logo failed to load:', e);
-                  e.currentTarget.style.display = 'none';
-                  const fallback = document.createElement('div');
-                  fallback.className = 'w-5 h-5 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
-                  fallback.textContent = 'C';
-                  e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
-                }}
               />}
               {link.label}
             </a>
@@ -124,12 +109,12 @@ const HomeNavigation = () => {
                       </>
                     ) : item.label === 'POLICIES' ? (
                       <>
-                        <Menu.Item onClick={() => navigate('/student-dress-code')}>Student Dress Code</Menu.Item>
+                        <Menu.Item onClick={() => window.open('/policies/Dress Code 2021.pdf', '_blank')}>Student Dress Code</Menu.Item>
                         <Menu.Item onClick={() => navigate('/charter-application')}>Charter Application</Menu.Item>
                         <Menu.Item onClick={() => navigate('/student-privacy')}>Student Privacy</Menu.Item>
                         <Menu.Item onClick={() => navigate('/vendor-agreement')}>Vendor Agreement</Menu.Item>
-                        <Menu.Item onClick={() => navigate('/wc-parish-policy-manual')}>WC Parish Policy Manual</Menu.Item>
-                        <Menu.Item onClick={() => navigate('/fight-fraud-waste-abuse')}>Fight Fraud, Waste, & Abuse</Menu.Item>
+                        <Menu.Item>WC Parish Policy Manual</Menu.Item>
+                        <Menu.Item onClick={() => window.open('https://www.lla.la.gov/report-fraud', '_blank')}>Fight Fraud, Waste, & Abuse</Menu.Item>
                       </>
                     ) : (
                       <>
@@ -148,6 +133,8 @@ const HomeNavigation = () => {
                       navigate('/public-notices');
                     } else if (item.label === 'CAREER') {
                       navigate('/jobs');
+                    } else if (item.label === 'SCHOOLS') {
+                      navigate('/schools');
                     }
                   }}
                 >
@@ -179,12 +166,14 @@ const HomeNavigation = () => {
                 </Button>
               </Menu.Target>
               <Menu.Dropdown>
+                <Menu.Item onClick={() => navigate('/schools')}>All Schools</Menu.Item>
+                <Menu.Divider />
                 <Menu.Label>Elementary Schools</Menu.Label>
-                <Menu.Item>Oak Grove Elementary School</Menu.Item>
+                <Menu.Item onClick={() => navigate('/schools')}>Oak Grove Elementary School</Menu.Item>
                 <Menu.Divider />
                 <Menu.Label>High Schools</Menu.Label>
-                <Menu.Item>Oak Grove High School</Menu.Item>
-                <Menu.Item>Forest High School</Menu.Item>
+                <Menu.Item onClick={() => navigate('/schools')}>Oak Grove High School</Menu.Item>
+                <Menu.Item onClick={() => navigate('/schools')}>Forest High School</Menu.Item>
               </Menu.Dropdown>
             </Menu>
 
@@ -367,7 +356,7 @@ const HomeNavigation = () => {
                               ) : item.label === 'POLICIES' ? (
                                 <>
                                   <button 
-                                    onClick={() => navigate('/student-dress-code')}
+                                    onClick={() => window.open('/policies/Dress Code 2021.pdf', '_blank')}
                                     className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
                                   >
                                     Student Dress Code
@@ -391,13 +380,12 @@ const HomeNavigation = () => {
                                     Vendor Agreement
                                   </button>
                                   <button 
-                                    onClick={() => navigate('/wc-parish-policy-manual')}
                                     className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
                                   >
                                     WC Parish Policy Manual
                                   </button>
                                   <button 
-                                    onClick={() => navigate('/fight-fraud-waste-abuse')}
+                                    onClick={() => window.open('https://www.lla.la.gov/report-fraud', '_blank')}
                                     className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
                                   >
                                     Fight Fraud, Waste, & Abuse

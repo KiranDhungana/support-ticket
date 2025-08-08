@@ -136,7 +136,7 @@ const NewsPage = () => {
               <Image
                 src={filteredNews[0].imageUrl || 'https://images.unsplash.com/photo-1523050854058-8df90110c9e1?w=800&h=400&fit=crop'}
                 alt={filteredNews[0].title}
-                className="w-full h-32 object-cover"
+                className="w-full h-32 object-contain bg-gray-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
@@ -232,7 +232,7 @@ const NewsPage = () => {
                         <Image
                           src={newsItem.imageUrl || 'https://images.unsplash.com/photo-1523050854058-8df90110c9e1?w=800&h=400&fit=crop'}
                           alt={newsItem.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain bg-gray-100"
                         />
                       </div>
                     </div>

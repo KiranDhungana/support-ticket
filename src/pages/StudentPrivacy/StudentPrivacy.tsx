@@ -1,0 +1,72 @@
+import { useState, useEffect } from 'react';
+import { 
+  Card, 
+  Text, 
+  Title, 
+  Container, 
+  Breadcrumbs,
+  Anchor,
+  Stack
+} from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
+import HomeNavigation from '../../components/HomeNavigation';
+
+const StudentPrivacy = () => {
+  const navigate = useNavigate();
+
+  const breadcrumbItems = [
+    { title: 'Home', href: '/' },
+    { title: 'Student Privacy', href: '#' }
+  ].map((item, index) => (
+    <Anchor href={item.href} key={index} onClick={(e) => { e.preventDefault(); navigate(item.href); }}>
+      {item.title}
+    </Anchor>
+  ));
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <HomeNavigation />
+      
+      <Container size="xl" className="py-8">
+        {/* Breadcrumbs */}
+        <Breadcrumbs className="mb-6">
+          {breadcrumbItems}
+        </Breadcrumbs>
+
+        {/* Page Header */}
+        <div className="mb-8">
+          <Title order={1} className="text-4xl font-bold text-gray-900 mb-4">
+            Student Privacy
+          </Title>
+          <Text className="text-gray-600">
+            Student Privacy Agreement Requirements and Information Sharing
+          </Text>
+        </div>
+
+        {/* PDF Viewer */}
+        <Card shadow="sm" padding="xl" radius="md" withBorder>
+          <div className="mb-6">
+            <Title order={2} className="text-2xl font-bold text-gray-900 mb-2">
+              Student Privacy Agreements
+            </Title>
+            <Text className="text-gray-600">
+              View the complete student privacy agreement document
+            </Text>
+          </div>
+
+          <div className="w-full h-screen">
+            <iframe
+              src="/policies/studentprivacy-agreementsrequirementsharing.pdf"
+              width="100%"
+              height="100%"
+              style={{ border: 'none', minHeight: '600px' }}
+              title="Student Privacy PDF"
+            />
+          </div>
+        </Card>
+      </Container>
+    </div>
+  );
+};
+
+export default StudentPrivacy;

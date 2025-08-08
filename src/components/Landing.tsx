@@ -227,7 +227,12 @@ const Landing = () => {
         <div className="w-full max-w-7xl px-2">
           <div className="flex flex-col sm:flex-row items-start sm:items-center mb-6 gap-2 sm:gap-6">
             <span className="text-white font-extrabold text-3xl mr-6">CALENDAR</span>
-            <a href="#" className="text-white underline text-lg">See All Events</a>
+            <a 
+              href="/events"
+              className="text-white underline text-lg hover:text-blue-200 transition-colors cursor-pointer bg-none border-none outline-none"
+            >
+              See All Events
+            </a>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {eventsLoading ? (
@@ -303,7 +308,7 @@ const Landing = () => {
                         <img 
                           src={news[0].imageUrl || '/public/Slider1.png'} 
                           alt={news[0].title} 
-                          className="w-full lg:w-60 h-32 object-cover rounded-lg" 
+                          className="w-full lg:w-60 h-32 object-contain bg-gray-100 rounded-lg" 
                         />
                         <div className="flex-1">
                           <div className="text-xs text-blue-700 font-semibold mb-1">FEATURED NEWS</div>
@@ -356,7 +361,7 @@ const Landing = () => {
                           <img 
                             src={newsItem.imageUrl || '/public/Slider1.png'} 
                             alt={newsItem.title} 
-                            className="w-full h-full object-cover" 
+                            className="w-full h-full object-contain bg-gray-100" 
                           />
                         </div>
                       </div>
@@ -425,18 +430,9 @@ const Landing = () => {
           {/* Contact/Logo */}
           <div>
                           <img 
-                src="/Logo.png" 
+                src="/logo.png" 
                 alt="West Carroll Parish School Board Logo" 
                 className="w-20 h-20 mb-3" 
-                onError={(e) => {
-                  console.error('Logo failed to load:', e);
-                  // Fallback to text if image fails
-                  e.currentTarget.style.display = 'none';
-                  const fallback = document.createElement('div');
-                  fallback.className = 'w-20 h-20 mb-3 bg-blue-700 text-white rounded flex items-center justify-center text-xs font-bold';
-                  fallback.textContent = 'WCPSB';
-                  e.currentTarget.parentNode?.insertBefore(fallback, e.currentTarget);
-                }}
               />
             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">Find Us</h3>
             <div className="text-gray-700 text-sm flex flex-col gap-1">
