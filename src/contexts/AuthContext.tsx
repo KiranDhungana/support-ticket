@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import API from "../services/api";
 
 interface User {
   email: string;
@@ -12,6 +13,7 @@ interface AuthContextType {
   user: User | null;
   login: (token: string, user: User) => void;
   logout: () => void;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,15 +21,29 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
+    const validateToken = async () => {
+      const storedToken = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
+      if (storedToken && storedUser) {
+        try {
+          // Validate token by making a request to a protected endpoint
+          await API.get("/users");
+          setToken(storedToken);
+          setUser(JSON.parse(storedUser));
+        } catch (error) {
+          // Token is invalid, clear storage
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+        }
+      }
+      setLoading(false);
+    };
+
+    validateToken();
   }, []);
 
   const login = (token: string, user: User) => {
@@ -44,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("user");
   };
 
-  return <AuthContext.Provider value={{ token, user, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ token, user, login, logout, loading }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

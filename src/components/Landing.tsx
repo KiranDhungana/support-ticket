@@ -1,4 +1,4 @@
-import { Image, Text, Button } from '@mantine/core';
+import { Image, Button } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight, IconChalkboard, IconCalendarEvent, IconPencil, IconBook2, IconUser, IconCalendar } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +8,9 @@ import type { Announcement } from '../services/announcementService';
 import { getPublishedNews } from '../services/newsService';
 import type { News } from '../services/newsService';
 import calendarService, { type CalendarEvent } from '../services/calendarService';
+import { listBannerImages } from '../services/uploadService';
 
-const images = [
+const defaultImages = [
   '/Slider1.png',
   '/Slider2.png',
   '/Slider3.png',
@@ -23,6 +24,7 @@ const images = [
 const Landing = () => {
   const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
+  const [bannerImages, setBannerImages] = useState<string[]>(defaultImages);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [news, setNews] = useState<News[]>([]);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -31,12 +33,13 @@ const Landing = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const next = () => setCurrent((c) => (c + 1) % images.length);
-  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length);
+  const next = () => setCurrent((c) => (c + 1) % bannerImages.length);
+  const prev = () => setCurrent((c) => (c - 1 + bannerImages.length) % bannerImages.length);
 
   useEffect(() => {
     fetchAnnouncements();
     fetchEvents();
+    fetchBannerImages();
   }, []);
 
   const fetchAnnouncements = async () => {
@@ -65,6 +68,18 @@ const Landing = () => {
       setEvents([]);
     } finally {
       setEventsLoading(false);
+    }
+  };
+
+  const fetchBannerImages = async () => {
+    try {
+      const res = await listBannerImages('banners');
+      if (res.success && res.data.length > 0) {
+        const urls = res.data.map((img) => img.url).filter(Boolean);
+        if (urls.length > 0) setBannerImages(urls);
+      }
+    } catch (e) {
+      console.warn('Falling back to default banner images');
     }
   };
 
@@ -151,16 +166,15 @@ const Landing = () => {
       {/* Hero Section / Slider */}
       <div className="relative w-full h-[260px] sm:h-[340px] md:h-[420px] flex items-end justify-center bg-gray-200 overflow-hidden">
         <Image
-          src={images[current]}
+          src={bannerImages[current]}
           alt="School Hero"
           className="object-cover w-full h-full absolute top-0 left-0 z-0"
           style={{ filter: 'brightness(0.95)' }}
         />
         <div className="relative z-10 w-full flex flex-col items-center pb-10">
-          <Text className="text-white text-4xl sm:text-5xl font-bold drop-shadow-lg mb-2">West Carroll Parish School Board</Text>
           <div className="flex items-center gap-4 mt-4">
             <div className="flex gap-2">
-              {images.map((_, idx) => (
+              {bannerImages.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrent(idx)}
@@ -200,7 +214,10 @@ const Landing = () => {
       <div className="bg-wcpsb-blue w-full py-8 px-2 flex flex-col items-center">
                     <div className="w-full max-w-7xl flex flex-col md:flex-row justify-between items-stretch divide-y md:divide-y-0 md:divide-x divide-blue-700">
           {/* Widget 1 */}
-          <div className="flex-1 flex flex-col items-center justify-center px-4">
+          <div 
+            className="flex-1 flex flex-col items-center justify-center px-4 cursor-pointer hover:bg-blue-800 transition-colors duration-200"
+            onClick={() => window.open('https://employers.indeed.com/jobs?status=open%2Cpaused', '_blank')}
+          >
             <IconChalkboard size={48} stroke={1.5} className="text-white mb-2" />
             <span className="text-white font-bold text-lg text-center">EMPLOYMENT</span>
           </div>

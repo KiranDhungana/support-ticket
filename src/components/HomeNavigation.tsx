@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 const navLinks = [
   { label: 'SUPERINTENDENT', dropdown: true },
   { label: 'PARENTS & STUDENTS', dropdown: true },
-  { label: 'EMPLOYEES' },
   { label: 'POLICIES', dropdown: true },
   { label: 'PUBLIC NOTICES' },
   { label: 'CAREER' },
@@ -100,12 +99,19 @@ const HomeNavigation = () => {
                         <Menu.Item onClick={() => navigate('/parents/volunteer')}>Volunteer Opportunities</Menu.Item>
                         <Menu.Item onClick={() => navigate('/parents/communication')}>Communication</Menu.Item>
                         <Menu.Item onClick={() => navigate('/parents/policies')}>Policies & Procedures</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/lunch-and-breakfast')}>Lunch and Breakfast</Menu.Item>
+                        <Menu.Item onClick={() => navigate('/child-find')}>Child Find</Menu.Item>
+                        <Menu.Item onClick={() => window.open('https://www.tutor.com/homeworklouisiana/learn-more', '_blank')}>Homework</Menu.Item>
                         <Menu.Item onClick={() => navigate('/students/registration')}>Student Registration</Menu.Item>
                         <Menu.Item onClick={() => navigate('/students/calendar')}>Student Calendar</Menu.Item>
                         <Menu.Item onClick={() => navigate('/students/resources')}>Student Resources</Menu.Item>
                         <Menu.Item onClick={() => navigate('/students/volunteer')}>Student Volunteer Opportunities</Menu.Item>
                         <Menu.Item onClick={() => navigate('/students/communication')}>Student Communication</Menu.Item>
                         <Menu.Item onClick={() => navigate('/students/policies')}>Student Policies & Procedures</Menu.Item>
+                      </>
+                    ) : item.label === 'CHILD FIND' ? (
+                      <>
+                        <Menu.Item onClick={() => navigate('/child-find')}>Child Find</Menu.Item>
                       </>
                     ) : item.label === 'POLICIES' ? (
                       <>
@@ -315,6 +321,24 @@ const HomeNavigation = () => {
                                     className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
                                   >
                                     Policies & Procedures
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/lunch-and-breakfast')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Lunch and Breakfast
+                                  </button>
+                                  <button 
+                                    onClick={() => navigate('/child-find')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Child Find
+                                  </button>
+                                  <button 
+                                    onClick={() => window.open('https://www.tutor.com/homeworklouisiana/learn-more', '_blank')}
+                                    className="block w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-100 rounded text-sm"
+                                  >
+                                    Homework
                                   </button>
                                   <button 
                                     onClick={() => navigate('/students/registration')}

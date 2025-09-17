@@ -22,6 +22,24 @@ export interface MultipleUploadResponse {
   }>;
 }
 
+export interface CloudinaryPDFInfo {
+  url: string;
+  public_id: string;
+  format: string;
+  bytes?: number;
+  created_at?: string;
+}
+
+export interface ListPDFsResponse {
+  success: boolean;
+  data: CloudinaryPDFInfo[];
+}
+
+export interface ListImagesResponse {
+  success: boolean;
+  data: CloudinaryImageInfo[];
+}
+
 // Upload single image
 export const uploadImage = async (file: File, folder?: string): Promise<UploadResponse> => {
   const formData = new FormData();
@@ -77,7 +95,25 @@ export const uploadMultipleFiles = async (files: File[], folder?: string): Promi
 
 // Delete file from Cloudinary
 export const deleteFile = async (publicId: string, resourceType: 'image' | 'raw' = 'image') => {
-  const response = await API.delete(`/upload/${publicId}?resource_type=${resourceType}`);
+  const response = await API.delete(`/upload/${encodeURIComponent(publicId)}?resource_type=${resourceType}`);
+  return response.data;
+};
+
+// List images in a folder (default 'banners')
+export const listBannerImages = async (folder?: string): Promise<ListImagesResponse> => {
+  const response = await API.get(`/upload/banners${folder ? `?folder=${encodeURIComponent(folder)}` : ''}`);
+  return response.data;
+};
+
+// List PDFs in a folder (default 'board-minutes')
+export const listBoardMinutesPDFs = async (folder?: string): Promise<ListPDFsResponse> => {
+  const response = await API.get(`/upload/board-minutes${folder ? `?folder=${encodeURIComponent(folder)}` : ''}`);
+  return response.data;
+};
+
+// Get signed URL for PDF access
+export const getSignedPDFUrl = async (publicId: string): Promise<{ success: boolean; url: string }> => {
+  const response = await API.get(`/upload/pdf-url/${encodeURIComponent(publicId)}`);
   return response.data;
 };
 
