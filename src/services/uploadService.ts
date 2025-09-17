@@ -40,6 +40,16 @@ export interface ListImagesResponse {
   data: CloudinaryImageInfo[];
 }
 
+// Image info for Cloudinary image resources
+export interface CloudinaryImageInfo {
+  url: string;
+  public_id: string;
+  format: string;
+  bytes?: number;
+  width?: number;
+  height?: number;
+}
+
 // Upload single image
 export const uploadImage = async (file: File, folder?: string): Promise<UploadResponse> => {
   const formData = new FormData();

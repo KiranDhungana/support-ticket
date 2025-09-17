@@ -1,4 +1,4 @@
-import { Container, Title, Text, Grid, Card, Table, Anchor, Stack } from '@mantine/core';
+import { Container, Title, Text, Grid, Card, Table,  Stack } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import HomeNavigation from '../../components/HomeNavigation';
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Group, Text, FileButton, Modal, Grid, Paper, ActionIcon, Loader, Tooltip } from '@mantine/core';
+import { Button, Group, Text, FileButton, Grid, Paper, ActionIcon, Loader, Tooltip } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { listBoardMinutesPDFs, uploadPDF, deleteFile, getSignedPDFUrl, type CloudinaryPDFInfo } from '../../services/uploadService';
 import { IconTrash, IconRefresh, IconUpload, IconFileText, IconEye, IconDownload } from '@tabler/icons-react';
@@ -10,7 +10,7 @@ const BoardMinutesManagement = () => {
   const [pdfs, setPdfs] = useState<CloudinaryPDFInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [uploading, setUploading] = useState<boolean>(false);
-  const [selectedPdf, setSelectedPdf] = useState<CloudinaryPDFInfo | null>(null);
+  // Removed modal viewer; we open PDFs in new tab
 
   const loadPDFs = async () => {
     try {
