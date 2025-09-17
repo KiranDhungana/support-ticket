@@ -1,339 +1,156 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Card, 
   Text, 
   Group, 
-  Badge, 
   Button, 
-  Modal, 
   Stack, 
   Title, 
   Container, 
-  TextInput, 
-  Table,
-  Divider,
-  Anchor,
-  Breadcrumbs,
-  Select,
+  Grid,
+  Loader,
+  Alert,
+  FileButton,
   ActionIcon,
-  Tooltip,
-  Alert
+  Tooltip
 } from '@mantine/core';
 import { 
-  IconSearch, 
   IconFileText, 
   IconDownload, 
   IconEye, 
-  IconCalendar,
-  IconClock,
-  IconBuilding,
-  IconAlertTriangle,
-  IconFilter,
-  IconInfoCircle
+  IconUpload,
+  IconTrash,
+  IconRefresh,
+  IconAlertTriangle
 } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
 import HomeNavigation from '../../components/HomeNavigation';
+import { listBoardMinutesPDFs, uploadPDF, deleteFile, getSignedPDFUrl, type CloudinaryPDFInfo } from '../../services/uploadService';
+import { useAuth } from '../../contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 
-// Sample board meeting data
-const boardMeetingsData = [
-  {
-    id: 1,
-    date: '2025-07-08',
-    dayOfWeek: 'Tuesday',
-    month: 'July',
-    day: 8,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'upcoming',
-    minutes: {
-      available: false,
-      url: null,
-      fileSize: null
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.3 MB'
-    },
-    notes: 'Building and Grounds discussion included'
-  },
-  {
-    id: 2,
-    date: '2025-06-24',
-    dayOfWeek: 'Tuesday',
-    month: 'June',
-    day: 24,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.8 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.1 MB'
-    },
-    notes: 'Budget approval and policy updates'
-  },
-  {
-    id: 3,
-    date: '2025-06-10',
-    dayOfWeek: 'Tuesday',
-    month: 'June',
-    day: 10,
-    year: 2025,
-    type: 'Special Session',
-    time: '4:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.2 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.9 MB'
-    },
-    notes: 'Emergency facility repairs discussion'
-  },
-  {
-    id: 4,
-    date: '2025-05-27',
-    dayOfWeek: 'Tuesday',
-    month: 'May',
-    day: 27,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'Lincoln Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.0 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.4 MB'
-    },
-    notes: 'End of year academic review'
-  },
-  {
-    id: 5,
-    date: '2025-05-13',
-    dayOfWeek: 'Tuesday',
-    month: 'May',
-    day: 13,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.7 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.2 MB'
-    },
-    notes: 'Teacher contract negotiations'
-  },
-  {
-    id: 6,
-    date: '2025-04-29',
-    dayOfWeek: 'Tuesday',
-    month: 'April',
-    day: 29,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.9 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.0 MB'
-    },
-    notes: 'Technology infrastructure updates'
-  },
-  {
-    id: 7,
-    date: '2025-04-15',
-    dayOfWeek: 'Tuesday',
-    month: 'April',
-    day: 15,
-    year: 2025,
-    type: 'Special Session',
-    time: '5:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.5 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.8 MB'
-    },
-    notes: 'Emergency budget review'
-  },
-  {
-    id: 8,
-    date: '2025-03-25',
-    dayOfWeek: 'Tuesday',
-    month: 'March',
-    day: 25,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.1 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.3 MB'
-    },
-    notes: 'Spring academic assessment review'
-  },
-  {
-    id: 9,
-    date: '2025-03-11',
-    dayOfWeek: 'Tuesday',
-    month: 'March',
-    day: 11,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '1.8 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.1 MB'
-    },
-    notes: 'Facility maintenance planning'
-  },
-  {
-    id: 10,
-    date: '2025-02-25',
-    dayOfWeek: 'Tuesday',
-    month: 'February',
-    day: 25,
-    year: 2025,
-    type: 'Regular Meeting',
-    time: '6:00 PM',
-    location: 'West Carroll Parish School Board Office',
-    status: 'completed',
-    minutes: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.0 MB'
-    },
-    agenda: {
-      available: true,
-      url: '/sample-pdf.pdf',
-      fileSize: '2.2 MB'
-    },
-    notes: 'Curriculum development discussion'
-  }
-];
+const BOARD_MINUTES_FOLDER = 'board-minutes';
 
 const BoardMinutes = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('All Meetings');
-  const [selectedStatus, setSelectedStatus] = useState('All');
-  const [selectedMeeting, setSelectedMeeting] = useState<any>(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  const { user } = useAuth();
+  const location = useLocation();
+  const [pdfs, setPdfs] = useState<CloudinaryPDFInfo[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [selectedPdf, setSelectedPdf] = useState<CloudinaryPDFInfo | null>(null);
+  const [pdfModalOpen, setPdfModalOpen] = useState(false);
 
-  const meetingTypes = ['All Meetings', 'Regular Meeting', 'Special Session', 'Notice of Training'];
-  const statusOptions = ['All', 'upcoming', 'completed'];
+  const isAdmin = user?.email === 'utsab@wcpsb.com';
+  const isAdminRoute = location.pathname === '/wc-school-board-minutes' && isAdmin;
 
-  const filteredMeetings = boardMeetingsData.filter(meeting => {
-    const matchesSearch = 
-      meeting.dayOfWeek.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      meeting.month.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      meeting.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      meeting.notes.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesType = selectedType === 'All Meetings' || meeting.type === selectedType;
-    const matchesStatus = selectedStatus === 'All' || meeting.status === selectedStatus;
-    
-    return matchesSearch && matchesType && matchesStatus;
-  });
-
-  const handleViewDocument = (meeting: any, documentType: 'minutes' | 'agenda') => {
-    setSelectedMeeting({ ...meeting, documentType });
-    setModalOpen(true);
+  const loadPDFs = async () => {
+    try {
+      setLoading(true);
+      const res = await listBoardMinutesPDFs(BOARD_MINUTES_FOLDER);
+      if (res.success) {
+        // Sort by creation date (newest first)
+        const sortedPdfs = res.data.sort((a, b) => {
+          const dateA = new Date(a.created_at || 0);
+          const dateB = new Date(b.created_at || 0);
+          return dateB.getTime() - dateA.getTime();
+        });
+        setPdfs(sortedPdfs);
+      }
+    } catch (e) {
+      notifications.show({ color: 'red', title: 'Error', message: 'Failed to load board minutes' });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDownloadDocument = (url: string, filename: string) => {
+  useEffect(() => {
+    loadPDFs();
+  }, []);
+
+  const handleUpload = async (file: File | null) => {
+    if (!file) return;
+    try {
+      setUploading(true);
+      const res = await uploadPDF(file, BOARD_MINUTES_FOLDER);
+      if (res.success) {
+        notifications.show({ color: 'green', title: 'Uploaded', message: res.data.originalName });
+        await loadPDFs();
+      }
+    } catch (e) {
+      notifications.show({ color: 'red', title: 'Error', message: 'Upload failed' });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async (publicId: string) => {
+    try {
+      await deleteFile(publicId, 'raw');
+      notifications.show({ color: 'green', title: 'Deleted', message: 'Board minutes removed' });
+      await loadPDFs();
+    } catch (e) {
+      notifications.show({ color: 'red', title: 'Error', message: 'Delete failed' });
+    }
+  };
+
+  const handleViewPDF = async (pdf: CloudinaryPDFInfo) => {
+    try {
+      // Get signed URL for secure access
+      const signedUrlResponse = await getSignedPDFUrl(pdf.public_id);
+      if (signedUrlResponse.success) {
+        const pdfWithSignedUrl = { ...pdf, url: signedUrlResponse.url };
+        setSelectedPdf(pdfWithSignedUrl);
+        setPdfModalOpen(true);
+      } else {
+        // Fallback to original URL
+        setSelectedPdf(pdf);
+        setPdfModalOpen(true);
+      }
+    } catch (error) {
+      console.error('Error getting signed URL:', error);
+      // Fallback to original URL
+      setSelectedPdf(pdf);
+      setPdfModalOpen(true);
+    }
+  };
+
+  const handleDownloadPDF = (pdf: CloudinaryPDFInfo) => {
     const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
+    link.href = pdf.url;
+    link.download = pdf.public_id.split('/').pop() || 'board-minutes.pdf';
+    link.target = '_blank';
     link.click();
   };
 
-  const formatDate = (meeting: any) => {
-    return `${meeting.dayOfWeek}, ${meeting.month} ${meeting.day}, ${meeting.year}`;
+  const formatFileSize = (bytes?: number) => {
+    if (!bytes) return 'Unknown size';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const getStatusColor = (status: string) => {
-    return status === 'upcoming' ? 'blue' : 'green';
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'Unknown date';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
-  const getStatusText = (status: string) => {
-    return status === 'upcoming' ? 'Upcoming' : 'Completed';
+  const getFileName = (publicId: string) => {
+    const parts = publicId.split('/');
+    const fileName = parts[parts.length - 1];
+    return fileName.replace(/\.[^/.]+$/, ''); // Remove extension
   };
-
-  const breadcrumbItems = [
-            { title: 'West Carroll Parish School Board', href: '/' },
-    { title: 'Leadership', href: '#' },
-    { title: 'Board Minutes & Agenda', href: '/board-minutes' }
-  ].map((item, index) => (
-    <Anchor href={item.href} key={index} size="sm">
-      {item.title}
-    </Anchor>
-  ));
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <HomeNavigation />
+      {!isAdminRoute && <HomeNavigation />}
       
       <Container size="lg" className="py-8">
-        {/* Breadcrumbs */}
-        <Breadcrumbs className="mb-6" separator="→">
-          {breadcrumbItems}
-        </Breadcrumbs>
-
         {/* Header */}
         <div className="mb-8">
           <Group gap="md" align="center" className="mb-4">
@@ -341,16 +158,44 @@ const BoardMinutes = () => {
               <img 
                 src="/logo.png" 
                 alt="West Carroll Parish School Board Logo" 
-                className="w-16 h-16 mb-4" 
+                className="w-16 h-16" 
               />
-              <Title order={1} className="text-4xl font-bold wcpsb-gold">
-                Board Minutes & Agenda
+              <Title order={1} className="text-4xl font-bold text-wcpsb-blue">
+                Board Meeting Minutes
               </Title>
             </div>
           </Group>
           <Text className="text-gray-600 text-lg mb-4">
-            Access meeting agendas, minutes, and related documents from West Carroll Parish School Board meetings.
+            Access meeting minutes and documents from West Carroll Parish School Board meetings.
           </Text>
+          
+          {/* Admin Controls */}
+          {isAdmin && (
+            <Card withBorder shadow="sm" radius="md" p="md" className="mb-6 bg-blue-50">
+              <Group justify="space-between">
+                <Text fw={600} size="sm" className="text-blue-800">
+                  Admin Controls
+                </Text>
+                <Group gap="sm">
+                  <FileButton onChange={handleUpload} accept="application/pdf" disabled={uploading}>
+                    {(props) => (
+                      <Button 
+                        leftSection={<IconUpload size={16} />} 
+                        loading={uploading} 
+                        size="sm"
+                        {...props}
+                      >
+                        Upload Minutes
+                      </Button>
+                    )}
+                  </FileButton>
+                  <ActionIcon variant="light" onClick={loadPDFs} title="Refresh">
+                    <IconRefresh size={18} />
+                  </ActionIcon>
+                </Group>
+              </Group>
+            </Card>
+          )}
           
           {/* Disclaimer Alert */}
           <Alert 
@@ -360,292 +205,191 @@ const BoardMinutes = () => {
             variant="light"
             className="mb-6"
           >
-            THE LINCOLN PARISH SCHOOL BOARD RESERVES THE RIGHT TO ENTER INTO EXECUTIVE SESSION, IF NEEDED, IN ACCORDANCE WITH La.R.S. 42:17
+            THE WEST CARROLL PARISH SCHOOL BOARD RESERVES THE RIGHT TO ENTER INTO EXECUTIVE SESSION, IF NEEDED, IN ACCORDANCE WITH La.R.S. 42:17
           </Alert>
         </div>
 
-        {/* Search and Filter Section */}
-        <Card shadow="sm" padding="lg" radius="md" withBorder className="mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <TextInput
-              placeholder="Search meetings..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              leftSection={<IconSearch size={16} />}
-              size="md"
-            />
-            <Select
-              placeholder="Meeting Type"
-              value={selectedType}
-              onChange={(value) => setSelectedType(value || 'All Meetings')}
-              data={meetingTypes}
-              leftSection={<IconFilter size={16} />}
-              size="md"
-            />
-            <Select
-              placeholder="Status"
-              value={selectedStatus}
-              onChange={(value) => setSelectedStatus(value || 'All')}
-              data={statusOptions}
-              leftSection={<IconCalendar size={16} />}
-              size="md"
-            />
+        {/* PDF List */}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Group gap="md">
+              <Loader size="md" />
+              <Text size="lg" className="text-gray-600">Loading board minutes...</Text>
+            </Group>
           </div>
+        ) : pdfs.length === 0 ? (
+          <Card withBorder shadow="sm" radius="md" p="xl" className="text-center">
+            <Stack gap="md">
+              <IconFileText size={48} className="text-gray-400 mx-auto" />
+              <Title order={3} className="text-gray-600">No Board Minutes Available</Title>
+              <Text className="text-gray-500">
+                Board meeting minutes will be posted here once they are uploaded.
+              </Text>
+            </Stack>
         </Card>
-
-        {/* Meetings Table */}
-        <Card shadow="sm" radius="md" withBorder>
-          <div className="overflow-x-auto">
-            <Table striped highlightOnHover>
-              <Table.Thead>
-                <Table.Tr className="bg-gray-50">
-                  <Table.Th>Meeting Date</Table.Th>
-                  <Table.Th>Type</Table.Th>
-                  <Table.Th>Status</Table.Th>
-                  <Table.Th>Minutes</Table.Th>
-                  <Table.Th>Agenda</Table.Th>
-                  <Table.Th>Actions</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {filteredMeetings.map((meeting) => (
-                  <Table.Tr key={meeting.id} className="hover:bg-gray-50">
-                    <Table.Td>
-                      <div>
-                        <Text fw={500} size="sm">
-                          {formatDate(meeting)}
-                        </Text>
-                        <Group gap="xs" className="mt-1">
-                          <IconClock size={14} className="text-gray-500" />
-                          <Text size="xs" className="text-gray-600">
-                            {meeting.time}
-                          </Text>
-                          <IconBuilding size={14} className="text-gray-500" />
-                          <Text size="xs" className="text-gray-600">
-                            {meeting.location}
-                          </Text>
-                        </Group>
-                        {meeting.notes && (
-                          <Text size="xs" className="text-gray-500 mt-1 italic">
-                            {meeting.notes}
-                          </Text>
-                        )}
+        ) : (
+          <Grid gutter="md">
+            {pdfs.map((pdf) => (
+              <Grid.Col key={pdf.public_id} span={{ base: 12, sm: 6, md: 4 }}>
+                <Card 
+                  withBorder 
+                  shadow="sm" 
+                  radius="md" 
+                  p="lg"
+                  className="h-full hover:shadow-md transition-shadow duration-200"
+                >
+                  <Stack gap="md">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <IconFileText size={32} className="text-red-600" />
                       </div>
-                    </Table.Td>
-                    <Table.Td>
-                      <Badge 
-                        color={meeting.type === 'Special Session' ? 'orange' : 'blue'} 
-                        variant="light" 
+                      <Title order={4} size="h5" className="text-gray-800 text-center">
+                        {getFileName(pdf.public_id)}
+                      </Title>
+                      <Text size="sm" className="text-gray-500">
+                        {formatDate(pdf.created_at)}
+                      </Text>
+                    </div>
+
+                    <div className="text-center">
+                      <Text size="xs" className="text-gray-500">
+                        {formatFileSize(pdf.bytes)}
+                      </Text>
+                    </div>
+
+                    <Group justify="center" gap="sm">
+                      <Button 
                         size="sm"
-                      >
-                        {meeting.type}
-                      </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      <Badge 
-                        color={getStatusColor(meeting.status)} 
                         variant="light" 
-                        size="sm"
-                      >
-                        {getStatusText(meeting.status)}
-                      </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      {meeting.minutes.available ? (
-                        <Group gap="xs">
-                          <Button 
-                            variant="light" 
-                            color="blue" 
-                            size="xs"
                             leftSection={<IconEye size={14} />}
-                            onClick={() => handleViewDocument(meeting, 'minutes')}
+                        onClick={() => handleViewPDF(pdf)}
                           >
                             View
                           </Button>
                           <Button 
+                        size="sm" 
                             variant="light" 
                             color="green" 
-                            size="xs"
                             leftSection={<IconDownload size={14} />}
-                            onClick={() => handleDownloadDocument(meeting.minutes.url!, `${meeting.month}-${meeting.day}-${meeting.year}-minutes.pdf`)}
+                        onClick={() => handleDownloadPDF(pdf)}
                           >
                             Download
                           </Button>
-                          <Text size="xs" className="text-gray-500">
-                            {meeting.minutes.fileSize}
-                          </Text>
-                        </Group>
-                      ) : (
-                        <Text size="sm" className="text-gray-400 italic">
-                          Not available
-                        </Text>
-                      )}
-                    </Table.Td>
-                    <Table.Td>
-                      {meeting.agenda.available ? (
-                        <Group gap="xs">
-                          <Button 
-                            variant="light" 
-                            color="blue" 
-                            size="xs"
-                            leftSection={<IconEye size={14} />}
-                            onClick={() => handleViewDocument(meeting, 'agenda')}
-                          >
-                            View
-                          </Button>
-                          <Button 
-                            variant="light" 
-                            color="green" 
-                            size="xs"
-                            leftSection={<IconDownload size={14} />}
-                            onClick={() => handleDownloadDocument(meeting.agenda.url!, `${meeting.month}-${meeting.day}-${meeting.year}-agenda.pdf`)}
-                          >
-                            Download
-                          </Button>
-                          <Text size="xs" className="text-gray-500">
-                            {meeting.agenda.fileSize}
-                          </Text>
-                        </Group>
-                      ) : (
-                        <Text size="sm" className="text-gray-400 italic">
-                          Not available
-                        </Text>
-                      )}
-                    </Table.Td>
-                    <Table.Td>
-                      <Group gap="xs">
-                        <Tooltip label="Meeting Details">
+                      {isAdmin && (
+                        <Tooltip label="Delete">
                           <ActionIcon
+                            color="red" 
                             variant="light"
-                            color="gray"
-                            onClick={() => {
-                              setSelectedMeeting({ ...meeting, documentType: 'details' });
-                              setModalOpen(true);
-                            }}
+                            onClick={() => handleDelete(pdf.public_id)}
                           >
-                            <IconInfoCircle size={16} />
+                            <IconTrash size={14} />
                           </ActionIcon>
                         </Tooltip>
+                      )}
                       </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
-              </Table.Tbody>
-            </Table>
-          </div>
-
-          {filteredMeetings.length === 0 && (
-            <div className="text-center py-8">
-              <Text size="lg" className="text-gray-500">
-                No meetings found matching your search criteria.
-              </Text>
-            </div>
-          )}
-        </Card>
+                  </Stack>
+                </Card>
+              </Grid.Col>
+            ))}
+          </Grid>
+        )}
       </Container>
 
-      {/* Document Viewer Modal */}
-      <Modal 
-        opened={modalOpen} 
-        onClose={() => setModalOpen(false)} 
-        size="xl"
-        title={
-          selectedMeeting ? 
-            `${selectedMeeting.documentType === 'details' ? 'Meeting Details' : 
-              selectedMeeting.documentType === 'minutes' ? 'Meeting Minutes' : 'Meeting Agenda'} - ${formatDate(selectedMeeting)}` 
-            : ''
-        }
-      >
-        {selectedMeeting && (
-          <div>
-            {selectedMeeting.documentType === 'details' ? (
-              <Stack gap="lg">
-                <div className="text-center">
-                  <Title order={3} className="text-xl font-bold text-gray-900 mb-2">
-                    {formatDate(selectedMeeting)}
-                  </Title>
-                  <Badge 
-                    color={selectedMeeting.type === 'Special Session' ? 'orange' : 'blue'} 
-                    variant="light" 
-                    size="lg"
-                    className="mb-2"
-                  >
-                    {selectedMeeting.type}
-                  </Badge>
-                  <Badge 
-                    color={getStatusColor(selectedMeeting.status)} 
-                    variant="light" 
-                    size="lg"
-                  >
-                    {getStatusText(selectedMeeting.status)}
-                  </Badge>
+      {/* PDF Viewer Modal */}
+      {pdfModalOpen && selectedPdf && createPortal(
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            padding: '20px',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
+                Board Minutes - {getFileName(selectedPdf.public_id)}
+              </h2>
+              <button 
+                onClick={() => setPdfModalOpen(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  color: '#666'
+                }}
+              >
+                ×
+              </button>
                 </div>
 
-                <Divider />
-
+            {/* PDF Viewer */}
                 <div>
-                  <Title order={4} className="text-lg font-semibold mb-3">Meeting Information</Title>
-                  <Stack gap="sm">
-                    <Group gap="sm">
-                      <IconClock size={18} className="text-gray-500" />
-                      <Text size="sm" className="font-medium">Time:</Text>
-                      <Text size="sm">{selectedMeeting.time}</Text>
-                    </Group>
-                    <Group gap="sm">
-                      <IconBuilding size={18} className="text-gray-500" />
-                      <Text size="sm" className="font-medium">Location:</Text>
-                      <Text size="sm">{selectedMeeting.location}</Text>
-                    </Group>
-                    {selectedMeeting.notes && (
-                      <Group gap="sm">
-                        <IconFileText size={18} className="text-gray-500" />
-                        <Text size="sm" className="font-medium">Notes:</Text>
-                        <Text size="sm">{selectedMeeting.notes}</Text>
-                      </Group>
-                    )}
-                  </Stack>
-                </div>
-
-                <div>
-                  <Title order={4} className="text-lg font-semibold mb-3">Available Documents</Title>
-                  <Group gap="md">
-                    {selectedMeeting.minutes.available && (
-                      <Button 
-                        variant="light" 
-                        color="blue"
-                        leftSection={<IconFileText size={16} />}
-                        onClick={() => handleViewDocument(selectedMeeting, 'minutes')}
-                      >
-                        View Minutes ({selectedMeeting.minutes.fileSize})
-                      </Button>
-                    )}
-                    {selectedMeeting.agenda.available && (
-                      <Button 
-                        variant="light" 
-                        color="green"
-                        leftSection={<IconFileText size={16} />}
-                        onClick={() => handleViewDocument(selectedMeeting, 'agenda')}
-                      >
-                        View Agenda ({selectedMeeting.agenda.fileSize})
-                      </Button>
-                    )}
-                  </Group>
-                </div>
-              </Stack>
-            ) : (
-              <div className="h-96">
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Document</label>
+              <div style={{ 
+                border: '1px solid #ddd', 
+                borderRadius: '8px', 
+                overflow: 'hidden',
+                height: '400px'
+              }}>
                 <iframe
-                  src={`${selectedMeeting[selectedMeeting.documentType].url}#toolbar=1&navpanes=1&scrollbar=1`}
+                  src={`${selectedPdf.url}#toolbar=1&navpanes=1&scrollbar=1`}
                   width="100%"
                   height="100%"
-                  title={`${selectedMeeting.documentType === 'minutes' ? 'Minutes' : 'Agenda'} - ${formatDate(selectedMeeting)}`}
-                  className="border-0 rounded"
+                  title={getFileName(selectedPdf.public_id)}
+                  style={{ border: 'none' }}
                 />
               </div>
-            )}
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
+              <button 
+                onClick={() => setPdfModalOpen(false)}
+                style={{
+                  padding: '10px 20px',
+                  border: '1px solid #ddd',
+                  borderRadius: '6px',
+                  background: 'white',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                Close
+              </button>
+              <button 
+                onClick={() => handleDownloadPDF(selectedPdf)}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: '6px',
+                  background: '#007bff',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '14px'
+                }}
+              >
+                Download PDF
+              </button>
+            </div>
           </div>
+        </div>,
+        document.body
         )}
-      </Modal>
     </div>
   );
 };

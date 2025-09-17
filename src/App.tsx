@@ -5,7 +5,7 @@ import Landing from "./components/Landing"
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import UserDashboard from "./pages/Dashboard/UserDashboard";
 import { MantineProvider } from "@mantine/core";
-import { IconGauge, IconTicket, IconUsers, IconDashboard, IconFileText, IconBuilding, IconBell, IconNews, IconBriefcase, IconUser } from "@tabler/icons-react";
+import { IconGauge, IconTicket, IconUsers, IconDashboard, IconFileText, IconBuilding, IconBell, IconNews, IconBriefcase, IconUser, IconPhoto, IconUpload } from "@tabler/icons-react";
 import { SideBar } from "./layouts/SideBar";
 import { AdminSidebar } from "./components/AdminSidebar";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
@@ -34,13 +34,21 @@ import BoardMemberManagement from "./pages/Admin/BoardMemberManagement";
 import Schools from "./pages/Schools/Schools";
 import Events from "./pages/Events/Events";
 import VendorAgreement from "./pages/VendorAgreement/VendorAgreement";
+import BannerManagement from "./pages/Admin/BannerManagement";
+import WCSchoolBoard from "./pages/WCSchoolBoard/WCSchoolBoard";
+import VisionStatement from "./pages/VisionStatement/VisionStatement";
+import LunchAndBreakfast from "./pages/LunchAndBreakfast/LunchAndBreakfast";
+import WellnessPolicy from "./pages/WellnessPolicy/WellnessPolicy";
+import NonDiscriminationPolicy from "./pages/NonDiscriminationPolicy/NonDiscriminationPolicy";
+import ChildFind from "./pages/ChildFind/ChildFind";
+import BoardMinutesManagement from "./pages/Admin/BoardMinutesManagement";
 
 function LayoutWithSidebar() {
   const location = useLocation();
   const { user } = useAuth();
 
   // Show home navigation for non-logged-in users and public pages
-  const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname.startsWith("/news/article/") || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals" || location.pathname === "/schools" || location.pathname === "/events" || location.pathname === "/vendor-agreement";
+  const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname.startsWith("/news/article/") || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals" || location.pathname === "/schools" || location.pathname === "/events" || location.pathname === "/vendor-agreement" || location.pathname === "/wc-school-board" || location.pathname === "/wc-school-board-minutes" || location.pathname === "/vision-statement" || location.pathname === "/lunch-and-breakfast" || location.pathname === "/wellness-policy" || location.pathname === "/non-discrimination-policy" || location.pathname === "/child-find";
   const isLoggedIn = !!user;
   
   // Check if current route is an admin route
@@ -63,7 +71,9 @@ function LayoutWithSidebar() {
     { icon: IconBriefcase, label: 'Job Management', path: '/admin/jobs' },
     { icon: IconBuilding, label: 'Staff Management', path: '/admin/staff' },
     { icon: IconUsers, label: 'Board Members', path: '/admin/board-members' },
+    { icon: IconUpload, label: 'Upload Minutes', path: '/admin/board-minutes' },
     { icon: IconUser, label: 'Users', path: '/admin/users' },
+    { icon: IconPhoto, label: 'Banner Images', path: '/admin/banners' },
   ];
   
   return (
@@ -95,6 +105,13 @@ function LayoutWithSidebar() {
           <Route path="/schools" element={<Schools/>} />
           <Route path="/events" element={<Events/>} />
           <Route path="/vendor-agreement" element={<VendorAgreement/>} />
+          <Route path="/wc-school-board" element={<WCSchoolBoard/>} />
+          <Route path="/wc-school-board-minutes" element={<BoardMinutes/>} />
+          <Route path="/vision-statement" element={<VisionStatement/>} />
+          <Route path="/lunch-and-breakfast" element={<LunchAndBreakfast/>} />
+          <Route path="/wellness-policy" element={<WellnessPolicy/>} />
+          <Route path="/non-discrimination-policy" element={<NonDiscriminationPolicy/>} />
+          <Route path="/child-find" element={<ChildFind/>} />
           <Route
             path="/dashboard/admin"
             element={
@@ -164,6 +181,22 @@ function LayoutWithSidebar() {
             element={
               <ProtectedRoute>
                 <BoardMemberManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/banners"
+            element={
+              <ProtectedRoute>
+                <BannerManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/board-minutes"
+            element={
+              <ProtectedRoute>
+                <BoardMinutesManagement />
               </ProtectedRoute>
             }
           />
