@@ -156,7 +156,7 @@ const BoardMinutes = () => {
           <Group gap="md" align="center" className="mb-4">
             <div className="flex items-center gap-3">
               <img 
-                src="/logo.png" 
+                src={(localStorage.getItem('app_logo_url') || '/logo.png')} 
                 alt="West Carroll Parish School Board Logo" 
                 className="w-16 h-16" 
               />

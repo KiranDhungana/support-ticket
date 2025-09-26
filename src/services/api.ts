@@ -2,7 +2,7 @@ import { notifications } from "@mantine/notifications";
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://api.82.25.95.230.nip.io/api",
+  baseURL: "http://localhost:5000/api",
 });
 
 API.interceptors.request.use(
@@ -34,7 +34,7 @@ API.interceptors.response.use(
 export default API;
 
 export const loginWithGoogle = async (token: string) => {
-  const response = await axios.post("http://api.82.25.95.230.nip.io/api/auth/google", {
+  const response = await axios.post("http://localhost:5000/api/auth/google", {
     token,
   });
   return response.data;
@@ -128,3 +128,7 @@ export const deletePublicNotice = (id: string) => {
 export const getPublicNoticesByCategory = (category: string) => {
   return API.get(`/public-notices/category/${category}`);
 };
+
+// Settings
+export const getSettings = () => API.get('/settings');
+export const updateSettings = (data: { logoUrl?: string }) => API.put('/settings', data);

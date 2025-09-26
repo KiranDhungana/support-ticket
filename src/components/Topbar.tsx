@@ -6,7 +6,7 @@ const Topbar = () => {
         <div className="flex flex-col items-center sm:flex-row sm:justify-between h-26 sm:h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <img src="/logo.png" alt="West Carroll Parish School Board Logo" width={36} height={36} />
+            <img src={(localStorage.getItem('app_logo_url') || '/logo.png')} alt="West Carroll Parish School Board Logo" width={36} height={36} />
           </div>
 
           {/* Title */}
