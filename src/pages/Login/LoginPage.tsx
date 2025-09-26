@@ -18,7 +18,7 @@ const LoginPage = () => {
   const { login, user, token } = useAuth();
   useEffect(() => {
     if (token && user) {
-      if (user.email === "utsab@wcpsb.com") {
+      if (user.role === "admin") {
         navigate("/dashboard/admin", { replace: true });
       } else {
         navigate("/dashboard/user", { replace: true });
@@ -41,7 +41,7 @@ const LoginPage = () => {
 
         login(response.token, response.user);
 
-        if (response.user.email === "utsab@wcpsb.com") {
+        if (response.user.role === "admin") {
           navigate("/dashboard/admin");
           notifications.show({
             position: "top-right",

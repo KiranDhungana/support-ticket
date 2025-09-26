@@ -13,7 +13,7 @@ const navLinks = [
 ];
 
 const quickLinks = [
-  { label: 'Help desk login', href: 'http://localhost:5173/login' },
+  { label: 'Help desk login', href: 'http://api.82.25.95.230.nip.io/login' },
   { label: 'Canvas', href: 'http://westcarroll.instructure.com/' },
 ];
 
@@ -39,7 +39,7 @@ const HomeNavigation = () => {
           onClick={() => navigate('/')}
         >
           <img 
-            src="/logo.png" 
+            src={(localStorage.getItem('app_logo_url') || '/logo.png')} 
             alt="West Carroll Parish School Board Logo" 
             width={36} 
             height={36}  
@@ -59,7 +59,7 @@ const HomeNavigation = () => {
               className="text-white hover:underline text-sm font-medium flex items-center gap-2"
             >
               {link.label === 'Canvas' && <img 
-                src="/logo.png" 
+                src={(localStorage.getItem('app_logo_url') || '/logo.png')} 
                 alt="Canvas" 
                 width={20} 
                 height={20} 

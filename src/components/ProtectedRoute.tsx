@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }: { children: any }) => {
     return <Navigate to="/" replace />;
   }
 
-  if (location.pathname.startsWith("/dashboard/admin") && user.email !== "utsab@wcpsb.com") {
+  if (location.pathname.startsWith("/dashboard/admin") && user.role !== "admin") {
     return <Navigate to="/dashboard/user" replace />;
   }
 

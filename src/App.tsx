@@ -1,4 +1,5 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 // import LoginPage from "./pages/Login/LoginPage";
 import Landing from "./components/Landing"
@@ -42,10 +43,24 @@ import WellnessPolicy from "./pages/WellnessPolicy/WellnessPolicy";
 import NonDiscriminationPolicy from "./pages/NonDiscriminationPolicy/NonDiscriminationPolicy";
 import ChildFind from "./pages/ChildFind/ChildFind";
 import BoardMinutesManagement from "./pages/Admin/BoardMinutesManagement";
+import { getSettings } from "./services/api";
+import Branding from "./pages/Admin/Branding";
 
 function LayoutWithSidebar() {
   const location = useLocation();
   const { user } = useAuth();
+  // Fetch dynamic settings once and cache in localStorage
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getSettings();
+        const logoUrl = res?.data?.data?.logoUrl;
+        if (logoUrl) {
+          localStorage.setItem('app_logo_url', logoUrl);
+        }
+      } catch {}
+    })();
+  }, []);
 
   // Show home navigation for non-logged-in users and public pages
   const isPublicPage = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/public-notices" || location.pathname === "/announcements" || location.pathname === "/staff" || location.pathname === "/news" || location.pathname.startsWith("/news/article/") || location.pathname === "/jobs" || location.pathname === "/board-members" || location.pathname === "/board-minutes" || location.pathname === "/principals" || location.pathname === "/schools" || location.pathname === "/events" || location.pathname === "/vendor-agreement" || location.pathname === "/wc-school-board" || location.pathname === "/wc-school-board-minutes" || location.pathname === "/vision-statement" || location.pathname === "/lunch-and-breakfast" || location.pathname === "/wellness-policy" || location.pathname === "/non-discrimination-policy" || location.pathname === "/child-find";
@@ -74,6 +89,7 @@ function LayoutWithSidebar() {
     { icon: IconUpload, label: 'Upload Minutes', path: '/admin/board-minutes' },
     { icon: IconUser, label: 'Users', path: '/admin/users' },
     { icon: IconPhoto, label: 'Banner Images', path: '/admin/banners' },
+    { icon: IconPhoto, label: 'Branding', path: '/admin/branding' },
   ];
   
   return (
@@ -189,6 +205,14 @@ function LayoutWithSidebar() {
             element={
               <ProtectedRoute>
                 <BannerManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/branding"
+            element={
+              <ProtectedRoute>
+                <Branding />
               </ProtectedRoute>
             }
           />
