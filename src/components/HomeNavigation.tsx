@@ -13,7 +13,7 @@ const navLinks = [
 ];
 
 const quickLinks = [
-  { label: 'Help desk login', href: 'http://api.82.25.95.230.nip.io/login' },
+  { label: 'Help desk login', href: 'http://82.25.95.230.nip.io/login' },
   { label: 'Canvas', href: 'http://westcarroll.instructure.com/' },
 ];
 
